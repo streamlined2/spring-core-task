@@ -6,6 +6,9 @@ import java.util.Objects;
 
 public class Training {
 
+	public record TrainingKey(Long traineeId, Long trainerId, LocalDate date) {
+	}
+
 	private Long traineeId;
 	private Long trainerId;
 	private String name;
@@ -20,6 +23,10 @@ public class Training {
 		this.type = type;
 		this.date = date;
 		this.duration = duration;
+	}
+
+	public TrainingKey getTrainingKey() {
+		return new TrainingKey(traineeId, trainerId, date);
 	}
 
 	public Long getTraineeId() {
