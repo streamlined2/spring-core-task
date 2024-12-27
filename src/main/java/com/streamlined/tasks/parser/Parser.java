@@ -1,11 +1,13 @@
 package com.streamlined.tasks.parser;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
@@ -14,6 +16,8 @@ import com.streamlined.tasks.entity.Entity;
 import com.streamlined.tasks.exception.ParseException;
 
 public abstract class Parser<K, T extends Entity<K>> {
+
+	private static final Logger log = LoggerFactory.getLogger(Parser.class);
 
 	private final CsvMapper csvMapper;
 	private final String sourceFileName;
@@ -36,7 +40,8 @@ public abstract class Parser<K, T extends Entity<K>> {
 				entityMap.put(trainee.getPrimaryKey(), trainee);
 			}
 			return entityMap;
-		} catch (IOException e) {
+		} catch (Exception e) {
+			log.error("Cannot parse input data", e);
 			throw new ParseException("Cannot parse input data", e);
 		}
 	}

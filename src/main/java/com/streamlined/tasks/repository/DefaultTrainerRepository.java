@@ -3,6 +3,8 @@ package com.streamlined.tasks.repository;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import com.streamlined.tasks.entity.Trainer;
@@ -12,6 +14,8 @@ import com.streamlined.tasks.storage.TrainerStorage;
 
 @Repository
 public class DefaultTrainerRepository implements TrainerRepository {
+
+	private static final Logger log = LoggerFactory.getLogger(DefaultTrainerRepository.class);
 
 	private final TrainerStorage trainerStorage;
 
@@ -23,6 +27,7 @@ public class DefaultTrainerRepository implements TrainerRepository {
 	public void create(Trainer trainer) {
 		Trainer oldTrainer = trainerStorage.saveNew(trainer);
 		if (oldTrainer != null) {
+			log.warn("Trainer with id {} already exists", trainer.getUserId());
 			throw new EntityAlreadyExistsException("Trainer with id %d already exists".formatted(trainer.getUserId()));
 		}
 	}
@@ -36,6 +41,7 @@ public class DefaultTrainerRepository implements TrainerRepository {
 	public void deleteById(Long id) {
 		Trainer trainer = trainerStorage.get(id);
 		if (trainer == null) {
+			log.warn("No entity found with id {}", id);
 			throw new NoSuchEntityException("No entity found with id %d".formatted(id));
 		}
 		trainerStorage.remove(id);
