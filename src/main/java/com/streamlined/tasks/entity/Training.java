@@ -4,7 +4,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.util.Objects;
 
-public class Training {
+public class Training implements Entity<com.streamlined.tasks.entity.Training.TrainingKey> {
 
 	public record TrainingKey(Long traineeId, Long trainerId, LocalDate date) {
 	}
@@ -15,6 +15,9 @@ public class Training {
 	private TrainingType type;
 	private LocalDate date;
 	private Duration duration;
+
+	public Training() {
+	}
 
 	public Training(Long traineeId, Long trainerId, String name, TrainingType type, LocalDate date, Duration duration) {
 		this.traineeId = traineeId;
@@ -95,6 +98,11 @@ public class Training {
 	public String toString() {
 		return "Training{traineeId=%d, trainerId=%d, name=%s, type=%s, date=%tF, duration=%s}".formatted(traineeId,
 				trainerId, name, type.getName(), date, duration.toString());
+	}
+
+	@Override
+	public TrainingKey getPrimaryKey() {
+		return getTrainingKey();
 	}
 
 }

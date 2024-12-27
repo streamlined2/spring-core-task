@@ -10,6 +10,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder.BCryptVersion;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.fasterxml.jackson.dataformat.csv.CsvMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.streamlined.tasks.service.TraineeService;
 import com.streamlined.tasks.service.TrainerService;
 import com.streamlined.tasks.service.TrainingService;
@@ -34,6 +36,13 @@ public class SpringcoretaskApplication implements CommandLineRunner {
 	@Bean
 	PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder(BCryptVersion.$2Y);
+	}
+
+	@Bean
+	CsvMapper csvMapper() {
+		CsvMapper csvMapper = new CsvMapper();
+		csvMapper.registerModule(new JavaTimeModule());
+		return csvMapper;
 	}
 
 	@Override

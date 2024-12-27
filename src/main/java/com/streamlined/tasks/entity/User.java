@@ -2,7 +2,7 @@ package com.streamlined.tasks.entity;
 
 import java.util.Objects;
 
-public abstract class User {
+public abstract class User implements Entity<Long> {
 
 	private Long userId;
 	private String firstName;
@@ -10,6 +10,9 @@ public abstract class User {
 	private String userName;
 	private String passwordHash;
 	private boolean isActive;
+
+	protected User() {
+	}
 
 	protected User(Long userId, String firstName, String lastName, String userName, String passwordHash,
 			boolean isActive) {
@@ -80,6 +83,11 @@ public abstract class User {
 			return Objects.equals(userId, user.userId);
 		}
 		return false;
+	}
+
+	@Override
+	public Long getPrimaryKey() {
+		return userId;
 	}
 
 }

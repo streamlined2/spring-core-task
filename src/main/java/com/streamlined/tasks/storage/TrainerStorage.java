@@ -1,7 +1,6 @@
 package com.streamlined.tasks.storage;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -9,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.streamlined.tasks.entity.Trainer;
+import com.streamlined.tasks.parser.TrainerParser;
 
 import jakarta.annotation.PostConstruct;
 
@@ -17,22 +17,17 @@ public class TrainerStorage {
 
 	private final Map<Long, Trainer> trainerMap;
 	private final PasswordEncoder passwordEncoder;
+	private final TrainerParser trainerParser;
 
-	public TrainerStorage(PasswordEncoder passwordEncoder) {
+	public TrainerStorage(PasswordEncoder passwordEncoder, TrainerParser trainerParser) {
 		this.passwordEncoder = passwordEncoder;
+		this.trainerParser = trainerParser;
 		trainerMap = new HashMap<>();
 	}
 
 	@PostConstruct
 	private void initialize() {
-		List<Trainer> trainerList = List.of(
-				new Trainer(1L, "Idris", "Powerful", "Idris.Powerful", passwordEncoder.encode("idris"), true, "math"),
-				new Trainer(2L, "Ken", "Artful", "Ken.Artful", passwordEncoder.encode("ken"), true, "art"),
-				new Trainer(3L, "Hue", "Colorful", "Hue.Colorful", passwordEncoder.encode("hue"), true,
-						"computer science"));
-		for (Trainer trainer : trainerList) {
-			trainerMap.put(trainer.getUserId(), trainer);
-		}
+		trainerMap.putAll(trainerParser.parse());
 	}
 
 	public Trainer saveNew(Trainer trainer) {

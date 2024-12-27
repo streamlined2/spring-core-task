@@ -4,6 +4,9 @@ public class Trainer extends User {
 
 	private String specialization;
 
+	public Trainer() {
+	}
+
 	public Trainer(Long userId, String firstName, String lastName, String userName, String passwordHash,
 			boolean isActive, String specialization) {
 		super(userId, firstName, lastName, userName, passwordHash, isActive);
