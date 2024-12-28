@@ -1,5 +1,6 @@
 package com.streamlined.tasks.repository;
 
+import java.util.Comparator;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -55,6 +56,12 @@ public class DefaultTrainerRepository implements TrainerRepository {
 	@Override
 	public Stream<Trainer> findAll() {
 		return trainerStorage.getAll();
+	}
+
+	@Override
+	public Optional<String> getMaxUsernameSerial(String firstName, String lastName) {
+		return findAll().filter(trainer -> trainer.userNameStartsWith(firstName, lastName))
+				.map(trainer -> trainer.getUsernameSerial(firstName, lastName)).max(Comparator.naturalOrder());
 	}
 
 }

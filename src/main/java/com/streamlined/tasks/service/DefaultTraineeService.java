@@ -39,6 +39,7 @@ public class DefaultTraineeService implements TraineeService {
 		try {
 			Trainee trainee = traineeMapper.toEntity(dto);
 			trainee.setPasswordHash(passwordEncoder.encode(password));
+			trainee.setNextUsernameSerial(traineeRepository.getMaxUsernameSerial(dto.firstName(), dto.lastName()));
 			traineeRepository.create(trainee);
 		} catch (Exception e) {
 			log.error("Error creating trainee entity", e);
@@ -53,6 +54,7 @@ public class DefaultTraineeService implements TraineeService {
 					() -> new NoSuchEntityException("No trainee entity with id %d".formatted(dto.userId())));
 			Trainee newTrainee = traineeMapper.toEntity(dto);
 			newTrainee.setPasswordHash(trainee.getPasswordHash());
+			newTrainee.setUserName(trainee.getUserName());
 			traineeRepository.update(newTrainee);
 		} catch (Exception e) {
 			log.error("Error updating trainee entity", e);

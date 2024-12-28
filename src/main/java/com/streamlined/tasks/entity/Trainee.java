@@ -17,6 +17,13 @@ public class Trainee extends User {
 		this.address = address;
 	}
 
+	public Trainee(Long userId, String firstName, String lastName, String passwordHash, boolean isActive,
+			LocalDate dateOfBirth, String address) {
+		super(userId, firstName, lastName, passwordHash, isActive);
+		this.dateOfBirth = dateOfBirth;
+		this.address = address;
+	}
+
 	public LocalDate getDateOfBirth() {
 		return dateOfBirth;
 	}

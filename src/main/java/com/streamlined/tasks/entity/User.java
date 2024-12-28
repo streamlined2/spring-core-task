@@ -1,6 +1,7 @@
 package com.streamlined.tasks.entity;
 
 import java.util.Objects;
+import java.util.Optional;
 
 public abstract class User implements Entity<Long> {
 
@@ -22,6 +23,37 @@ public abstract class User implements Entity<Long> {
 		this.userName = userName;
 		this.passwordHash = passwordHash;
 		this.isActive = isActive;
+	}
+
+	protected User(Long userId, String firstName, String lastName, String passwordHash, boolean isActive) {
+		this.userId = userId;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.userName = getInitialUsername(firstName, lastName);
+		this.passwordHash = passwordHash;
+		this.isActive = isActive;
+	}
+
+	public boolean userNameStartsWith(String firstName, String lastName) {
+		return getUserName().startsWith(getInitialUsername(firstName, lastName));
+	}
+
+	public String getInitialUsername(String firstName, String lastName) {
+		return firstName + "." + lastName;
+	}
+
+	public String getUsernameSerial(String firstName, String lastName) {
+		return getUserName().substring(getInitialUsername(firstName, lastName).length());
+	}
+
+	private void setUsernameSerial(String serial) {
+		userName = getInitialUsername(firstName, lastName) + serial;
+	}
+
+	public void setNextUsernameSerial(Optional<String> serial) {
+		String nextSerial = serial.map(value -> value.isBlank() ? "1" : Long.toString(Long.parseLong(value) + 1))
+				.orElse("");
+		setUsernameSerial(nextSerial);
 	}
 
 	public Long getUserId() {

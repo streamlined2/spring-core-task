@@ -39,6 +39,7 @@ public class DefaultTrainerService implements TrainerService {
 		try {
 			Trainer trainer = trainerMapper.toEntity(dto);
 			trainer.setPasswordHash(passwordEncoder.encode(password));
+			trainer.setNextUsernameSerial(trainerRepository.getMaxUsernameSerial(dto.firstName(), dto.lastName()));
 			trainerRepository.create(trainer);
 		} catch (Exception e) {
 			log.error("Error creating trainer entity", e);
@@ -53,6 +54,7 @@ public class DefaultTrainerService implements TrainerService {
 					() -> new NoSuchEntityException("No trainer entity with id %d".formatted(dto.userId())));
 			Trainer newTrainer = trainerMapper.toEntity(dto);
 			newTrainer.setPasswordHash(trainer.getPasswordHash());
+			newTrainer.setUserName(trainer.getUserName());
 			trainerRepository.update(newTrainer);
 		} catch (Exception e) {
 			log.error("Error updating trainer entity", e);

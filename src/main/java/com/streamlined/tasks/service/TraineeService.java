@@ -16,7 +16,7 @@ public interface TraineeService {
 	void deleteById(Long id);
 
 	Optional<TraineeDto> findById(Long id);
-	
+
 	Stream<TraineeDto> findAll();
 
 }

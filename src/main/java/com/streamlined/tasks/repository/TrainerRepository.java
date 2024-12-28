@@ -17,4 +17,6 @@ public interface TrainerRepository {
 
 	Stream<Trainer> findAll();
 
+	Optional<String> getMaxUsernameSerial(String firstName, String lastName);
+
 }
