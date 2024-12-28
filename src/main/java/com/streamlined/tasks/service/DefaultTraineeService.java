@@ -5,7 +5,6 @@ import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.streamlined.tasks.dto.TraineeDto;
@@ -25,20 +24,20 @@ public class DefaultTraineeService implements TraineeService {
 
 	private final TraineeMapper traineeMapper;
 	private final TraineeRepository traineeRepository;
-	private final PasswordEncoder passwordEncoder;
+	private final SecurityService securityService;
 
 	public DefaultTraineeService(TraineeMapper traineeMapper, TraineeRepository traineeRepository,
-			PasswordEncoder passwordEncoder) {
+			SecurityService securityService) {
 		this.traineeMapper = traineeMapper;
 		this.traineeRepository = traineeRepository;
-		this.passwordEncoder = passwordEncoder;
+		this.securityService = securityService;
 	}
 
 	@Override
-	public void create(TraineeDto dto, String password) {
+	public void create(TraineeDto dto, char[] password) {
 		try {
 			Trainee trainee = traineeMapper.toEntity(dto);
-			trainee.setPasswordHash(passwordEncoder.encode(password));
+			trainee.setPasswordHash(securityService.getPasswordHash(password));
 			trainee.setNextUsernameSerial(traineeRepository.getMaxUsernameSerial(dto.firstName(), dto.lastName()));
 			traineeRepository.create(trainee);
 		} catch (Exception e) {
@@ -63,11 +62,11 @@ public class DefaultTraineeService implements TraineeService {
 	}
 
 	@Override
-	public void updatePassword(Long id, String password) {
+	public void updatePassword(Long id, char[] password) {
 		try {
 			Trainee trainee = traineeRepository.findById(id)
 					.orElseThrow(() -> new NoSuchEntityException("No trainee entity with id %d".formatted(id)));
-			trainee.setPasswordHash(passwordEncoder.encode(password));
+			trainee.setPasswordHash(securityService.getPasswordHash(password));
 			traineeRepository.update(trainee);
 		} catch (Exception e) {
 			log.error("Error updating password for trainee entity", e);

@@ -7,11 +7,11 @@ import com.streamlined.tasks.dto.TraineeDto;
 
 public interface TraineeService {
 
-	void create(TraineeDto dto, String password);
+	void create(TraineeDto dto, char[] password);
 
 	void update(TraineeDto dto);
 
-	void updatePassword(Long id, String password);
+	void updatePassword(Long id, char[] password);
 
 	void deleteById(Long id);
 

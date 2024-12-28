@@ -56,12 +56,13 @@ public class SpringcoretaskApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		try {
-			TraineeDto dto = new TraineeDto(100L, "Jack", "Fantasy", "Jack.Fantasy", true, LocalDate.of(2000, 1, 1), "");
-			traineeService.create(dto, "pass");
+			TraineeDto dto = new TraineeDto(100L, "Jack", "Fantasy", "Jack.Fantasy", true, LocalDate.of(2000, 1, 1),
+					"");
+			traineeService.create(dto, "pass".toCharArray());
 			dto = new TraineeDto(101L, "Jack", "Fantasy", "Jack.Fantasy", true, LocalDate.of(2000, 1, 1), "");
-			traineeService.create(dto, "pass");
+			traineeService.create(dto, "pass".toCharArray());
 			dto = new TraineeDto(102L, "Jack", "Fantasy", "Jack.Fantasy", true, LocalDate.of(2000, 1, 1), "");
-			traineeService.create(dto, "pass");
+			traineeService.create(dto, "pass".toCharArray());
 
 			traineeService.findAll().map(Objects::toString).forEach(log::info);
 			trainerService.findAll().map(Objects::toString).forEach(log::info);

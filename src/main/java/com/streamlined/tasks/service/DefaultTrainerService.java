@@ -5,7 +5,6 @@ import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.streamlined.tasks.dto.TrainerDto;
@@ -25,20 +24,20 @@ public class DefaultTrainerService implements TrainerService {
 
 	private final TrainerMapper trainerMapper;
 	private final TrainerRepository trainerRepository;
-	private final PasswordEncoder passwordEncoder;
+	private final SecurityService securityService;
 
 	public DefaultTrainerService(TrainerMapper trainerMapper, TrainerRepository trainerRepository,
-			PasswordEncoder passwordEncoder) {
+			SecurityService securityService) {
 		this.trainerMapper = trainerMapper;
 		this.trainerRepository = trainerRepository;
-		this.passwordEncoder = passwordEncoder;
+		this.securityService = securityService;
 	}
 
 	@Override
-	public void create(TrainerDto dto, String password) {
+	public void create(TrainerDto dto, char[] password) {
 		try {
 			Trainer trainer = trainerMapper.toEntity(dto);
-			trainer.setPasswordHash(passwordEncoder.encode(password));
+			trainer.setPasswordHash(securityService.getPasswordHash(password));
 			trainer.setNextUsernameSerial(trainerRepository.getMaxUsernameSerial(dto.firstName(), dto.lastName()));
 			trainerRepository.create(trainer);
 		} catch (Exception e) {
@@ -63,11 +62,11 @@ public class DefaultTrainerService implements TrainerService {
 	}
 
 	@Override
-	public void updatePassword(Long id, String password) {
+	public void updatePassword(Long id, char[] password) {
 		try {
 			Trainer trainer = trainerRepository.findById(id)
 					.orElseThrow(() -> new NoSuchEntityException("No trainer entity with id %d".formatted(id)));
-			trainer.setPasswordHash(passwordEncoder.encode(password));
+			trainer.setPasswordHash(securityService.getPasswordHash(password));
 			trainerRepository.update(trainer);
 		} catch (Exception e) {
 			log.error("Error updating password for trainer entity", e);
