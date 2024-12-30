@@ -1,7 +1,6 @@
 package com.streamlined.tasks.repository;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.util.List;
 import java.util.Optional;
@@ -127,7 +126,7 @@ class DefaultTrainerRepositoryTest {
 
 		Optional<Trainer> foundTrainer = trainerRepository.findById(trainer.getUserId());
 
-		assumeTrue(foundTrainer.isPresent());
+		assertTrue(foundTrainer.isPresent());
 		assertSame(trainer, foundTrainer.get());
 	}
 
@@ -141,7 +140,7 @@ class DefaultTrainerRepositoryTest {
 
 		Optional<Trainer> foundTrainer = trainerRepository.findById(trainerToLookup.getUserId());
 
-		assumeTrue(foundTrainer.isEmpty());
+		assertTrue(foundTrainer.isEmpty());
 	}
 
 	@Test

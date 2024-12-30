@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.streamlined.tasks.entity.Training;
@@ -15,11 +16,16 @@ import jakarta.annotation.PostConstruct;
 public class TrainingStorage {
 
 	private final Map<Training.TrainingKey, Training> trainingMap;
-	private final TrainingParser trainingParser;
+	private TrainingParser trainingParser;
 
-	public TrainingStorage(TrainingParser trainingParser) {
-		this.trainingParser = trainingParser;
+	public TrainingStorage() {
 		trainingMap = new HashMap<>();
+	}
+
+	@Autowired
+	public TrainingStorage(TrainingParser trainingParser) {
+		this();
+		this.trainingParser = trainingParser;
 	}
 
 	@PostConstruct
@@ -41,6 +47,14 @@ public class TrainingStorage {
 
 	public Stream<Training> getAll() {
 		return trainingMap.values().stream();
+	}
+
+	public void clear() {
+		trainingMap.clear();
+	}
+
+	public int size() {
+		return trainingMap.size();
 	}
 
 }
