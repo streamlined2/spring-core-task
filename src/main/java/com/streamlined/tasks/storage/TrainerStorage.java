@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.streamlined.tasks.entity.Trainer;
@@ -16,11 +15,9 @@ import jakarta.annotation.PostConstruct;
 public class TrainerStorage {
 
 	private final Map<Long, Trainer> trainerMap;
-	private final PasswordEncoder passwordEncoder;
 	private final TrainerParser trainerParser;
 
-	public TrainerStorage(PasswordEncoder passwordEncoder, TrainerParser trainerParser) {
-		this.passwordEncoder = passwordEncoder;
+	public TrainerStorage(TrainerParser trainerParser) {
 		this.trainerParser = trainerParser;
 		trainerMap = new HashMap<>();
 	}

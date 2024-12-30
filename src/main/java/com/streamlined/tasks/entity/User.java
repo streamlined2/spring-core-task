@@ -25,15 +25,6 @@ public abstract class User implements Entity<Long> {
 		this.isActive = isActive;
 	}
 
-	protected User(Long userId, String firstName, String lastName, String passwordHash, boolean isActive) {
-		this.userId = userId;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.userName = getInitialUsername(firstName, lastName);
-		this.passwordHash = passwordHash;
-		this.isActive = isActive;
-	}
-
 	public boolean userNameStartsWith(String firstName, String lastName) {
 		return getUserName().startsWith(getInitialUsername(firstName, lastName));
 	}

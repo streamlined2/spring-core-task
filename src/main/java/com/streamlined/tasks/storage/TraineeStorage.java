@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.streamlined.tasks.entity.Trainee;
@@ -16,13 +16,16 @@ import jakarta.annotation.PostConstruct;
 public class TraineeStorage {
 
 	private final Map<Long, Trainee> traineeMap;
-	private final PasswordEncoder passwordEncoder;
-	private final TraineeParser traineeParser;
+	private TraineeParser traineeParser;
 
-	public TraineeStorage(PasswordEncoder passwordEncoder, TraineeParser traineeParser) {
-		this.passwordEncoder = passwordEncoder;
-		this.traineeParser = traineeParser;
+	public TraineeStorage() {
 		traineeMap = new HashMap<>();
+	}
+
+	@Autowired
+	public TraineeStorage(TraineeParser traineeParser) {
+		this();
+		this.traineeParser = traineeParser;
 	}
 
 	@PostConstruct
@@ -48,6 +51,14 @@ public class TraineeStorage {
 
 	public Stream<Trainee> getAll() {
 		return traineeMap.values().stream();
+	}
+
+	public void clear() {
+		traineeMap.clear();
+	}
+
+	public int size() {
+		return traineeMap.size();
 	}
 
 }
