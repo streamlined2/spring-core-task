@@ -15,11 +15,15 @@ import jakarta.annotation.PostConstruct;
 public class TrainerStorage {
 
 	private final Map<Long, Trainer> trainerMap;
-	private final TrainerParser trainerParser;
+	private TrainerParser trainerParser;
+
+	public TrainerStorage() {
+		trainerMap = new HashMap<>();
+	}
 
 	public TrainerStorage(TrainerParser trainerParser) {
+		this();
 		this.trainerParser = trainerParser;
-		trainerMap = new HashMap<>();
 	}
 
 	@PostConstruct
@@ -45,6 +49,14 @@ public class TrainerStorage {
 
 	public Stream<Trainer> getAll() {
 		return trainerMap.values().stream();
+	}
+
+	public void clear() {
+		trainerMap.clear();
+	}
+
+	public int size() {
+		return trainerMap.size();
 	}
 
 }
