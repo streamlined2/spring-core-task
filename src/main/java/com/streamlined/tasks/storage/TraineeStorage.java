@@ -15,50 +15,50 @@ import jakarta.annotation.PostConstruct;
 @Component
 public class TraineeStorage {
 
-	private final Map<Long, Trainee> traineeMap;
-	private TraineeParser traineeParser;
+    private final Map<Long, Trainee> traineeMap;
+    private TraineeParser traineeParser;
 
-	public TraineeStorage() {
-		traineeMap = new HashMap<>();
-	}
+    public TraineeStorage() {
+        traineeMap = new HashMap<>();
+    }
 
-	@Autowired
-	public TraineeStorage(TraineeParser traineeParser) {
-		this();
-		this.traineeParser = traineeParser;
-	}
+    @Autowired
+    public TraineeStorage(TraineeParser traineeParser) {
+        this();
+        this.traineeParser = traineeParser;
+    }
 
-	@PostConstruct
-	private void initilialize() {
-		traineeMap.putAll(traineeParser.parse());
-	}
+    @PostConstruct
+    private void initilialize() {
+        traineeMap.putAll(traineeParser.parse());
+    }
 
-	public Trainee saveNew(Trainee trainee) {
-		return traineeMap.putIfAbsent(trainee.getUserId(), trainee);
-	}
+    public Trainee saveNew(Trainee trainee) {
+        return traineeMap.putIfAbsent(trainee.getUserId(), trainee);
+    }
 
-	public void save(Long id, Trainee trainee) {
-		traineeMap.put(id, trainee);
-	}
+    public void save(Long id, Trainee trainee) {
+        traineeMap.put(id, trainee);
+    }
 
-	public Trainee get(Long id) {
-		return traineeMap.get(id);
-	}
+    public Trainee get(Long id) {
+        return traineeMap.get(id);
+    }
 
-	public void remove(Long id) {
-		traineeMap.remove(id);
-	}
+    public void remove(Long id) {
+        traineeMap.remove(id);
+    }
 
-	public Stream<Trainee> getAll() {
-		return traineeMap.values().stream();
-	}
+    public Stream<Trainee> getAll() {
+        return traineeMap.values().stream();
+    }
 
-	public void clear() {
-		traineeMap.clear();
-	}
+    public void clear() {
+        traineeMap.clear();
+    }
 
-	public int size() {
-		return traineeMap.size();
-	}
+    public int size() {
+        return traineeMap.size();
+    }
 
 }

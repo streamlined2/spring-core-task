@@ -15,46 +15,42 @@ import jakarta.annotation.PostConstruct;
 @Component
 public class TrainingStorage {
 
-	private final Map<Training.TrainingKey, Training> trainingMap;
-	private TrainingParser trainingParser;
+    private final Map<Training.TrainingKey, Training> trainingMap;
+    private TrainingParser trainingParser;
 
-	public TrainingStorage() {
-		trainingMap = new HashMap<>();
-	}
+    public TrainingStorage() {
+        trainingMap = new HashMap<>();
+    }
 
-	@Autowired
-	public TrainingStorage(TrainingParser trainingParser) {
-		this();
-		this.trainingParser = trainingParser;
-	}
+    @Autowired
+    public TrainingStorage(TrainingParser trainingParser) {
+        this();
+        this.trainingParser = trainingParser;
+    }
 
-	@PostConstruct
-	private void initialize() {
-		trainingMap.putAll(trainingParser.parse());
-	}
+    @PostConstruct
+    private void initialize() {
+        trainingMap.putAll(trainingParser.parse());
+    }
 
-	public Training saveNew(Training training) {
-		return trainingMap.putIfAbsent(training.getTrainingKey(), training);
-	}
+    public Training saveNew(Training training) {
+        return trainingMap.putIfAbsent(training.getTrainingKey(), training);
+    }
 
-	public void save(TrainingKey id, Training training) {
-		trainingMap.put(id, training);
-	}
+    public Training get(TrainingKey id) {
+        return trainingMap.get(id);
+    }
 
-	public Training get(TrainingKey id) {
-		return trainingMap.get(id);
-	}
+    public Stream<Training> getAll() {
+        return trainingMap.values().stream();
+    }
 
-	public Stream<Training> getAll() {
-		return trainingMap.values().stream();
-	}
+    public void clear() {
+        trainingMap.clear();
+    }
 
-	public void clear() {
-		trainingMap.clear();
-	}
-
-	public int size() {
-		return trainingMap.size();
-	}
+    public int size() {
+        return trainingMap.size();
+    }
 
 }

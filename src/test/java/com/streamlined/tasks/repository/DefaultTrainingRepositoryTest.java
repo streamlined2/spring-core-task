@@ -24,102 +24,102 @@ import com.streamlined.tasks.storage.TrainingStorage;
 @ExtendWith(MockitoExtension.class)
 class DefaultTrainingRepositoryTest {
 
-	@Spy
-	private TrainingStorage trainingStorage;
+    @Spy
+    private TrainingStorage trainingStorage;
 
-	@InjectMocks
-	private DefaultTrainingRepository trainingRepository;
+    @InjectMocks
+    private DefaultTrainingRepository trainingRepository;
 
-	private static TrainingType mathType;
-	private static TrainingType artType;
-	private static TrainingType computerType;
+    private static TrainingType mathType;
+    private static TrainingType artType;
+    private static TrainingType computerType;
 
-	@BeforeAll
-	static void setup() {
-		mathType = new TrainingType("math");
-		artType = new TrainingType("art");
-		computerType = new TrainingType("computer");
-	}
+    @BeforeAll
+    static void setup() {
+        mathType = new TrainingType("math");
+        artType = new TrainingType("art");
+        computerType = new TrainingType("computer");
+    }
 
-	@Test
-	@DisplayName("create should create new training entity if entity with such id does not exist")
-	void testCreate_shouldCreateNewTraining_ifTrainingEntityWithSuchIdDoesNotExist() {
-		trainingStorage.clear();
-		Training training = new Training(1L, 1L, "Math training", mathType, LocalDate.of(2020, 1, 1),
-				Duration.ofDays(20));
+    @Test
+    @DisplayName("create should create new training entity if entity with such id does not exist")
+    void testCreate_shouldCreateNewTraining_ifTrainingEntityWithSuchIdDoesNotExist() {
+        trainingStorage.clear();
+        Training training = new Training(1L, 1L, "Math training", mathType, LocalDate.of(2020, 1, 1),
+                Duration.ofDays(20));
 
-		trainingRepository.create(training);
+        trainingRepository.create(training);
 
-		assertEquals(1, trainingStorage.size());
-		Training savedTraining = trainingStorage.get(training.getTrainingKey());
-		assertNotNull(savedTraining);
-		assertEquals(training.toString(), savedTraining.toString());
-	}
+        assertEquals(1, trainingStorage.size());
+        Training savedTraining = trainingStorage.get(training.getTrainingKey());
+        assertNotNull(savedTraining);
+        assertEquals(training.toString(), savedTraining.toString());
+    }
 
-	@Test
-	@DisplayName("create should throw exception if entity with such id exists")
-	void testCreate_shouldThrowException_ifTrainingEntityWithSuchIdExists() {
-		trainingStorage.clear();
-		Training training = new Training(1L, 1L, "Math training", mathType, LocalDate.of(2020, 1, 1),
-				Duration.ofDays(20));
-		trainingStorage.saveNew(training);
+    @Test
+    @DisplayName("create should throw exception if entity with such id exists")
+    void testCreate_shouldThrowException_ifTrainingEntityWithSuchIdExists() {
+        trainingStorage.clear();
+        Training training = new Training(1L, 1L, "Math training", mathType, LocalDate.of(2020, 1, 1),
+                Duration.ofDays(20));
+        trainingStorage.saveNew(training);
 
-		assertThrows(EntityAlreadyExistsException.class, () -> trainingRepository.create(training));
-		assertEquals(1, trainingStorage.size());
-		Training savedTraining = trainingStorage.get(training.getTrainingKey());
-		assertNotNull(savedTraining);
-		assertEquals(training.toString(), savedTraining.toString());
-	}
+        assertThrows(EntityAlreadyExistsException.class, () -> trainingRepository.create(training));
+        assertEquals(1, trainingStorage.size());
+        Training savedTraining = trainingStorage.get(training.getTrainingKey());
+        assertNotNull(savedTraining);
+        assertEquals(training.toString(), savedTraining.toString());
+    }
 
-	@Test
-	@DisplayName("findById should return training entity wrapped in Optional if entity with such id exists")
-	void testFindById_shouldReturnTrainingEntity_ifTrainingEntityWithSuchIdExists() {
-		trainingStorage.clear();
-		Training training = new Training(1L, 1L, "Math training", mathType, LocalDate.of(2020, 1, 1),
-				Duration.ofDays(20));
-		trainingStorage.saveNew(training);
+    @Test
+    @DisplayName("findById should return training entity wrapped in Optional if entity with such id exists")
+    void testFindById_shouldReturnTrainingEntity_ifTrainingEntityWithSuchIdExists() {
+        trainingStorage.clear();
+        Training training = new Training(1L, 1L, "Math training", mathType, LocalDate.of(2020, 1, 1),
+                Duration.ofDays(20));
+        trainingStorage.saveNew(training);
 
-		Optional<Training> foundTraining = trainingRepository.findById(training.getTrainingKey());
+        Optional<Training> foundTraining = trainingRepository.findById(training.getTrainingKey());
 
-		assumeTrue(foundTraining.isPresent());
-		assertSame(training, foundTraining.get());
-	}
+        assumeTrue(foundTraining.isPresent());
+        assertSame(training, foundTraining.get());
+    }
 
-	@Test
-	@DisplayName("findById should return empty Optional if entity with such id does not exist")
-	void testFindById_shouldReturnEmptyOptional_ifTrainingEntityWithSuchIdDoesNotExist() {
-		trainingStorage.clear();
-		Training training = new Training(1L, 1L, "Math training", mathType, LocalDate.of(2020, 1, 1),
-				Duration.ofDays(20));
-		trainingStorage.saveNew(training);
-		Training trainingToLookup = new Training(2L, 1L, "Math training", mathType, LocalDate.of(2021, 1, 1),
-				Duration.ofDays(20));
+    @Test
+    @DisplayName("findById should return empty Optional if entity with such id does not exist")
+    void testFindById_shouldReturnEmptyOptional_ifTrainingEntityWithSuchIdDoesNotExist() {
+        trainingStorage.clear();
+        Training training = new Training(1L, 1L, "Math training", mathType, LocalDate.of(2020, 1, 1),
+                Duration.ofDays(20));
+        trainingStorage.saveNew(training);
+        Training trainingToLookup = new Training(2L, 1L, "Math training", mathType, LocalDate.of(2021, 1, 1),
+                Duration.ofDays(20));
 
-		Optional<Training> foundTraining = trainingRepository.findById(trainingToLookup.getTrainingKey());
+        Optional<Training> foundTraining = trainingRepository.findById(trainingToLookup.getTrainingKey());
 
-		assertTrue(foundTraining.isEmpty());
-	}
+        assertTrue(foundTraining.isEmpty());
+    }
 
-	@Test
-	@DisplayName("findAll should return all training entities storage contains")
-	void testFindAll_shouldReturnAllTrainingEntitiesStorageContains() {
-		trainingStorage.clear();
-		Training training1 = new Training(1L, 1L, "Math training", mathType, LocalDate.of(2020, 1, 1),
-				Duration.ofDays(20));
-		trainingStorage.saveNew(training1);
-		Training training2 = new Training(2L, 1L, "Math training", mathType, LocalDate.of(2021, 1, 1),
-				Duration.ofDays(20));
-		trainingStorage.saveNew(training2);
+    @Test
+    @DisplayName("findAll should return all training entities storage contains")
+    void testFindAll_shouldReturnAllTrainingEntitiesStorageContains() {
+        trainingStorage.clear();
+        Training training1 = new Training(1L, 1L, "Math training", mathType, LocalDate.of(2020, 1, 1),
+                Duration.ofDays(20));
+        trainingStorage.saveNew(training1);
+        Training training2 = new Training(2L, 1L, "Math training", mathType, LocalDate.of(2021, 1, 1),
+                Duration.ofDays(20));
+        trainingStorage.saveNew(training2);
 
-		List<Training> foundTrainings = trainingRepository.findAll().toList();
+        List<Training> foundTrainings = trainingRepository.findAll().toList();
 
-		assertEquals(2, foundTrainings.size());
-		Training foundTraining = trainingStorage.get(training1.getTrainingKey());
-		assertNotNull(foundTraining);
-		assertEquals(training1.toString(), foundTraining.toString());
-		foundTraining = trainingStorage.get(training2.getTrainingKey());
-		assertNotNull(foundTraining);
-		assertEquals(training2.toString(), foundTraining.toString());
-	}
+        assertEquals(2, foundTrainings.size());
+        Training foundTraining = trainingStorage.get(training1.getTrainingKey());
+        assertNotNull(foundTraining);
+        assertEquals(training1.toString(), foundTraining.toString());
+        foundTraining = trainingStorage.get(training2.getTrainingKey());
+        assertNotNull(foundTraining);
+        assertEquals(training2.toString(), foundTraining.toString());
+    }
 
 }

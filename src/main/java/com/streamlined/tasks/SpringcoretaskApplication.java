@@ -25,53 +25,53 @@ import com.streamlined.tasks.service.TrainingService;
 @SpringBootApplication
 public class SpringcoretaskApplication implements CommandLineRunner {
 
-	@Autowired
-	@Lazy
-	private TraineeService traineeService;
-	@Autowired
-	@Lazy
-	private TrainerService trainerService;
-	@Autowired
-	@Lazy
-	private TrainingService trainingService;
+    @Autowired
+    @Lazy
+    private TraineeService traineeService;
+    @Autowired
+    @Lazy
+    private TrainerService trainerService;
+    @Autowired
+    @Lazy
+    private TrainingService trainingService;
 
-	private static final Logger log = LoggerFactory.getLogger(SpringcoretaskApplication.class);
+    private static final Logger log = LoggerFactory.getLogger(SpringcoretaskApplication.class);
 
-	public static void main(String[] args) {
-		SpringApplication.run(SpringcoretaskApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(SpringcoretaskApplication.class, args);
+    }
 
-	@Bean
-	PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder(BCryptVersion.$2Y);
-	}
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(BCryptVersion.$2Y);
+    }
 
-	@Bean
-	CsvMapper csvMapper() {
-		CsvMapper csvMapper = new CsvMapper();
-		csvMapper.registerModule(new JavaTimeModule());
-		return csvMapper;
-	}
+    @Bean
+    CsvMapper csvMapper() {
+        CsvMapper csvMapper = new CsvMapper();
+        csvMapper.registerModule(new JavaTimeModule());
+        return csvMapper;
+    }
 
-	@Override
-	public void run(String... args) throws Exception {
-		try {
-			TraineeDto dto = new TraineeDto(100L, "Jack", "Fantasy", "Jack.Fantasy", true, LocalDate.of(2000, 1, 1),
-					"");
-			traineeService.create(dto, "pass".toCharArray());
-			dto = new TraineeDto(101L, "Jack", "Fantasy", "Jack.Fantasy", true, LocalDate.of(2000, 1, 1), "");
-			traineeService.create(dto, "pass".toCharArray());
-			dto = new TraineeDto(102L, "Jack", "Fantasy", "Jack.Fantasy", true, LocalDate.of(2000, 1, 1), "");
-			traineeService.create(dto, "pass".toCharArray());
+    @Override
+    public void run(String... args) throws Exception {
+        try {
+            TraineeDto dto = new TraineeDto(100L, "Jack", "Fantasy", "Jack.Fantasy", true, LocalDate.of(2000, 1, 1),
+                    "");
+            traineeService.create(dto, "pass".toCharArray());
+            dto = new TraineeDto(101L, "Jack", "Fantasy", "Jack.Fantasy", true, LocalDate.of(2000, 1, 1), "");
+            traineeService.create(dto, "pass".toCharArray());
+            dto = new TraineeDto(102L, "Jack", "Fantasy", "Jack.Fantasy", true, LocalDate.of(2000, 1, 1), "");
+            traineeService.create(dto, "pass".toCharArray());
 
-			traineeService.findAll().map(Objects::toString).forEach(log::info);
-			trainerService.findAll().map(Objects::toString).forEach(log::info);
-			trainingService.findAll().map(Objects::toString).forEach(log::info);
+            traineeService.findAll().map(Objects::toString).forEach(log::info);
+            trainerService.findAll().map(Objects::toString).forEach(log::info);
+            trainingService.findAll().map(Objects::toString).forEach(log::info);
 
-		} catch (Exception e) {
-			log.error("Error while executing application: {}", e.getMessage(), e);
-		}
+        } catch (Exception e) {
+            log.error("Error while executing application: {}", e.getMessage(), e);
+        }
 
-	}
+    }
 
 }

@@ -7,16 +7,16 @@ import com.streamlined.tasks.dto.TrainerDto;
 
 public interface TrainerService {
 
-	void create(TrainerDto dto, char[] password);
+    void create(TrainerDto dto, char[] password);
 
-	void update(TrainerDto dto);
+    void update(TrainerDto dto);
 
-	void updatePassword(Long id, char[] password);
+    void updatePassword(Long id, char[] password);
 
-	void deleteById(Long id);
+    void deleteById(Long id);
 
-	Optional<TrainerDto> findById(Long id);
+    Optional<TrainerDto> findById(Long id);
 
-	Stream<TrainerDto> findAll();
+    Stream<TrainerDto> findAll();
 
 }

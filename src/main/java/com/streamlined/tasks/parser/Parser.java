@@ -17,33 +17,33 @@ import com.streamlined.tasks.exception.ParseException;
 
 public abstract class Parser<K, T extends Entity<K>> {
 
-	private static final Logger log = LoggerFactory.getLogger(Parser.class);
+    private static final Logger log = LoggerFactory.getLogger(Parser.class);
 
-	private final CsvMapper csvMapper;
-	private final String sourceFileName;
-	private final Class<T> entityClass;
+    private final CsvMapper csvMapper;
+    private final String sourceFileName;
+    private final Class<T> entityClass;
 
-	protected Parser(Class<T> entityClass, CsvMapper csvMapper, String sourceFileName) {
-		this.entityClass = entityClass;
-		this.csvMapper = csvMapper;
-		this.sourceFileName = sourceFileName;
-	}
+    protected Parser(Class<T> entityClass, CsvMapper csvMapper, String sourceFileName) {
+        this.entityClass = entityClass;
+        this.csvMapper = csvMapper;
+        this.sourceFileName = sourceFileName;
+    }
 
-	public Map<K, T> parse() {
-		Map<K, T> entityMap = new HashMap<>();
-		try (InputStream is = getClass().getResourceAsStream(sourceFileName);
-				BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
-			CsvSchema schema = CsvSchema.emptySchema().withHeader();
-			MappingIterator<T> iterator = csvMapper.readerFor(entityClass).with(schema).readValues(reader);
-			while (iterator.hasNext()) {
-				T trainee = iterator.next();
-				entityMap.put(trainee.getPrimaryKey(), trainee);
-			}
-			return entityMap;
-		} catch (Exception e) {
-			log.error("Cannot parse input data", e);
-			throw new ParseException("Cannot parse input data", e);
-		}
-	}
+    public Map<K, T> parse() {
+        Map<K, T> entityMap = new HashMap<>();
+        try (InputStream is = getClass().getResourceAsStream(sourceFileName);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
+            CsvSchema schema = CsvSchema.emptySchema().withHeader();
+            MappingIterator<T> iterator = csvMapper.readerFor(entityClass).with(schema).readValues(reader);
+            while (iterator.hasNext()) {
+                T entity = iterator.next();
+                entityMap.put(entity.getPrimaryKey(), entity);
+            }
+            return entityMap;
+        } catch (Exception e) {
+            log.error("Cannot parse input data", e);
+            throw new ParseException("Cannot parse input data", e);
+        }
+    }
 
 }

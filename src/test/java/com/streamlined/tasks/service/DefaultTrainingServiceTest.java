@@ -35,152 +35,152 @@ import com.streamlined.tasks.repository.TrainingRepository;
 @ExtendWith(MockitoExtension.class)
 class DefaultTrainingServiceTest {
 
-	@Mock
-	private TrainingRepository trainingRepository;
+    @Mock
+    private TrainingRepository trainingRepository;
 
-	@Spy
-	private TrainingMapper trainingMapper;
+    @Spy
+    private TrainingMapper trainingMapper;
 
-	@InjectMocks
-	private DefaultTrainingService trainingService;
+    @InjectMocks
+    private DefaultTrainingService trainingService;
 
-	private static TrainingType mathType;
-	private static TrainingType artType;
-	private static TrainingType computerType;
+    private static TrainingType mathType;
+    private static TrainingType artType;
+    private static TrainingType computerType;
 
-	@BeforeAll
-	static void setup() {
-		mathType = new TrainingType("math");
-		artType = new TrainingType("art");
-		computerType = new TrainingType("computer");
-	}
+    @BeforeAll
+    static void setup() {
+        mathType = new TrainingType("math");
+        artType = new TrainingType("art");
+        computerType = new TrainingType("computer");
+    }
 
-	@Test
-	@DisplayName("create adds new entity")
-	void testCreate_shouldCreateNewEntity_ifCreateSucceeds() {
-		Training training = new Training(5L, 2L, "Art training", artType, LocalDate.of(2022, 1, 1),
-				Duration.ofDays(60));
-		TrainingDto trainingDto = trainingMapper.toDto(training);
-		TrainingKey trainingKey = training.getTrainingKey();
-		List<Training> trainingList = new ArrayList<>(
-				List.of(new Training(1L, 1L, "Math training", mathType, LocalDate.of(2020, 1, 1), Duration.ofDays(20)),
-						new Training(2L, 1L, "Math training", mathType, LocalDate.of(2021, 1, 1), Duration.ofDays(20)),
-						new Training(3L, 1L, "Math training", mathType, LocalDate.of(2022, 1, 1), Duration.ofDays(20)),
-						new Training(3L, 2L, "Art training", artType, LocalDate.of(2020, 1, 1), Duration.ofDays(60)),
-						new Training(4L, 2L, "Art training", artType, LocalDate.of(2021, 1, 1), Duration.ofDays(60)),
-						new Training(1L, 3L, "Computer science training", computerType, LocalDate.of(2020, 1, 1),
-								Duration.ofDays(120)),
-						new Training(3L, 3L, "Computer science training", computerType, LocalDate.of(2021, 1, 1),
-								Duration.ofDays(120)),
-						new Training(5L, 3L, "Computer science training", computerType, LocalDate.of(2022, 1, 1),
-								Duration.ofDays(120))));
-		final int initialTrainingListSize = trainingList.size();
+    @Test
+    @DisplayName("create adds new entity")
+    void testCreate_shouldCreateNewEntity_ifCreateSucceeds() {
+        Training training = new Training(5L, 2L, "Art training", artType, LocalDate.of(2022, 1, 1),
+                Duration.ofDays(60));
+        TrainingDto trainingDto = trainingMapper.toDto(training);
+        TrainingKey trainingKey = training.getTrainingKey();
+        List<Training> trainingList = new ArrayList<>(
+                List.of(new Training(1L, 1L, "Math training", mathType, LocalDate.of(2020, 1, 1), Duration.ofDays(20)),
+                        new Training(2L, 1L, "Math training", mathType, LocalDate.of(2021, 1, 1), Duration.ofDays(20)),
+                        new Training(3L, 1L, "Math training", mathType, LocalDate.of(2022, 1, 1), Duration.ofDays(20)),
+                        new Training(3L, 2L, "Art training", artType, LocalDate.of(2020, 1, 1), Duration.ofDays(60)),
+                        new Training(4L, 2L, "Art training", artType, LocalDate.of(2021, 1, 1), Duration.ofDays(60)),
+                        new Training(1L, 3L, "Computer science training", computerType, LocalDate.of(2020, 1, 1),
+                                Duration.ofDays(120)),
+                        new Training(3L, 3L, "Computer science training", computerType, LocalDate.of(2021, 1, 1),
+                                Duration.ofDays(120)),
+                        new Training(5L, 3L, "Computer science training", computerType, LocalDate.of(2022, 1, 1),
+                                Duration.ofDays(120))));
+        final int initialTrainingListSize = trainingList.size();
 
-		doAnswer(new Answer<Void>() {
-			@Override
-			public Void answer(InvocationOnMock invocation) throws Throwable {
-				trainingList.add(training);
-				return null;
-			}
-		}).when(trainingRepository).create(training);
+        doAnswer(new Answer<Void>() {
+            @Override
+            public Void answer(InvocationOnMock invocation) throws Throwable {
+                trainingList.add(training);
+                return null;
+            }
+        }).when(trainingRepository).create(training);
 
-		trainingService.create(trainingDto);
+        trainingService.create(trainingDto);
 
-		assertEquals(initialTrainingListSize + 1, trainingList.size());
-		assertTrue(trainingList.contains(training));
-		Optional<Training> newTraining = trainingList.stream().filter(t -> t.getTrainingKey().equals(trainingKey))
-				.findFirst();
-		assertTrue(newTraining.isPresent());
-		assertEquals(trainingDto, trainingMapper.toDto(newTraining.get()));
-		verify(trainingRepository).create(training);
-	}
+        assertEquals(initialTrainingListSize + 1, trainingList.size());
+        assertTrue(trainingList.contains(training));
+        Optional<Training> newTraining = trainingList.stream().filter(t -> t.getTrainingKey().equals(trainingKey))
+                .findFirst();
+        assertTrue(newTraining.isPresent());
+        assertEquals(trainingDto, trainingMapper.toDto(newTraining.get()));
+        verify(trainingRepository).create(training);
+    }
 
-	@Test
-	@DisplayName("create throws exception if training repository throws exception")
-	void testCreate_shouldThrowEntityCreationException_ifTrainingRepositoryThrowsException() {
-		Training training = new Training(1L, 1L, "Math training", mathType, LocalDate.of(2020, 1, 1),
-				Duration.ofDays(20));
-		TrainingDto trainingDto = trainingMapper.toDto(training);
-		final String errorMessage = "exception prevented new training entity creation";
+    @Test
+    @DisplayName("create throws exception if training repository throws exception")
+    void testCreate_shouldThrowEntityCreationException_ifTrainingRepositoryThrowsException() {
+        Training training = new Training(1L, 1L, "Math training", mathType, LocalDate.of(2020, 1, 1),
+                Duration.ofDays(20));
+        TrainingDto trainingDto = trainingMapper.toDto(training);
+        final String errorMessage = "exception prevented new training entity creation";
 
-		doAnswer(new ThrowsException(new RuntimeException(errorMessage))).when(trainingRepository).create(training);
+        doAnswer(new ThrowsException(new RuntimeException(errorMessage))).when(trainingRepository).create(training);
 
-		Exception e = assertThrows(EntityCreationException.class, () -> trainingService.create(trainingDto));
-		assertEquals("Error creating training entity", e.getMessage());
-		assertEquals(errorMessage, e.getCause().getMessage());
-		verify(trainingRepository).create(training);
-	}
+        Exception e = assertThrows(EntityCreationException.class, () -> trainingService.create(trainingDto));
+        assertEquals("Error creating training entity", e.getMessage());
+        assertEquals(errorMessage, e.getCause().getMessage());
+        verify(trainingRepository).create(training);
+    }
 
-	@Test
-	@DisplayName("findById fetches training entity for given training key")
-	void testFindById_shouldReturnFoundTrainingEntity_ifPassedIdValidAndExists() {
-		Training expectedTraining = new Training(3L, 1L, "Math training", mathType, LocalDate.of(2022, 1, 1),
-				Duration.ofDays(20));
-		TrainingDto expectedTrainingDto = trainingMapper.toDto(expectedTraining);
-		when(trainingRepository.findById(expectedTraining.getTrainingKey())).thenReturn(Optional.of(expectedTraining));
+    @Test
+    @DisplayName("findById fetches training entity for given training key")
+    void testFindById_shouldReturnFoundTrainingEntity_ifPassedIdValidAndExists() {
+        Training expectedTraining = new Training(3L, 1L, "Math training", mathType, LocalDate.of(2022, 1, 1),
+                Duration.ofDays(20));
+        TrainingDto expectedTrainingDto = trainingMapper.toDto(expectedTraining);
+        when(trainingRepository.findById(expectedTraining.getTrainingKey())).thenReturn(Optional.of(expectedTraining));
 
-		Optional<TrainingDto> actualTrainingDto = trainingService.findById(expectedTraining.getTrainingKey());
+        Optional<TrainingDto> actualTrainingDto = trainingService.findById(expectedTraining.getTrainingKey());
 
-		verify(trainingRepository).findById(expectedTraining.getTrainingKey());
-		assertTrue(actualTrainingDto.isPresent());
-		assertEquals(expectedTrainingDto, actualTrainingDto.get());
-	}
+        verify(trainingRepository).findById(expectedTraining.getTrainingKey());
+        assertTrue(actualTrainingDto.isPresent());
+        assertEquals(expectedTrainingDto, actualTrainingDto.get());
+    }
 
-	@Test
-	@DisplayName("findById returns empty Optional if given training key does not exist")
-	void testFindById_shouldReturnEmptyOptional_ifPassedIdDoesNotExist() {
-		TrainingKey trainingKey = new TrainingKey(1L, 1L, LocalDate.of(1900, 1, 1));
-		when(trainingRepository.findById(trainingKey)).thenReturn(Optional.empty());
+    @Test
+    @DisplayName("findById returns empty Optional if given training key does not exist")
+    void testFindById_shouldReturnEmptyOptional_ifPassedIdDoesNotExist() {
+        TrainingKey trainingKey = new TrainingKey(1L, 1L, LocalDate.of(1900, 1, 1));
+        when(trainingRepository.findById(trainingKey)).thenReturn(Optional.empty());
 
-		Optional<TrainingDto> actualTrainingDto = trainingService.findById(trainingKey);
+        Optional<TrainingDto> actualTrainingDto = trainingService.findById(trainingKey);
 
-		verify(trainingRepository).findById(trainingKey);
-		assertTrue(actualTrainingDto.isEmpty());
-	}
+        verify(trainingRepository).findById(trainingKey);
+        assertTrue(actualTrainingDto.isEmpty());
+    }
 
-	@Test
-	@DisplayName("findById throws exception if training repository throws exception")
-	void testFindById_shouldThrowEntityQueryException_ifTrainingRepositoryThrowsException() {
-		TrainingKey trainingKey = new TrainingKey(1L, 1L, LocalDate.of(1900, 1, 1));
-		when(trainingRepository.findById(trainingKey)).thenThrow(EntityQueryException.class);
+    @Test
+    @DisplayName("findById throws exception if training repository throws exception")
+    void testFindById_shouldThrowEntityQueryException_ifTrainingRepositoryThrowsException() {
+        TrainingKey trainingKey = new TrainingKey(1L, 1L, LocalDate.of(1900, 1, 1));
+        when(trainingRepository.findById(trainingKey)).thenThrow(EntityQueryException.class);
 
-		assertThrows(EntityQueryException.class, () -> trainingService.findById(trainingKey));
-		verify(trainingRepository).findById(trainingKey);
-	}
+        assertThrows(EntityQueryException.class, () -> trainingService.findById(trainingKey));
+        verify(trainingRepository).findById(trainingKey);
+    }
 
-	@Test
-	@DisplayName("findAll fetches all available training entities")
-	void testFindAll_shouldReturnAllAvailableTrainingEntities_ifTrainingRepositoryReturnsResult() {
-		List<Training> expectedTrainingList = List.of(
-				new Training(1L, 1L, "Math training", mathType, LocalDate.of(2020, 1, 1), Duration.ofDays(20)),
-				new Training(2L, 1L, "Math training", mathType, LocalDate.of(2021, 1, 1), Duration.ofDays(20)),
-				new Training(3L, 1L, "Math training", mathType, LocalDate.of(2022, 1, 1), Duration.ofDays(20)),
-				new Training(3L, 2L, "Art training", artType, LocalDate.of(2020, 1, 1), Duration.ofDays(60)),
-				new Training(4L, 2L, "Art training", artType, LocalDate.of(2021, 1, 1), Duration.ofDays(60)),
-				new Training(5L, 2L, "Art training", artType, LocalDate.of(2022, 1, 1), Duration.ofDays(60)),
-				new Training(1L, 3L, "Computer science training", computerType, LocalDate.of(2020, 1, 1),
-						Duration.ofDays(120)),
-				new Training(3L, 3L, "Computer science training", computerType, LocalDate.of(2021, 1, 1),
-						Duration.ofDays(120)),
-				new Training(5L, 3L, "Computer science training", computerType, LocalDate.of(2022, 1, 1),
-						Duration.ofDays(120)));
+    @Test
+    @DisplayName("findAll fetches all available training entities")
+    void testFindAll_shouldReturnAllAvailableTrainingEntities_ifTrainingRepositoryReturnsResult() {
+        List<Training> expectedTrainingList = List.of(
+                new Training(1L, 1L, "Math training", mathType, LocalDate.of(2020, 1, 1), Duration.ofDays(20)),
+                new Training(2L, 1L, "Math training", mathType, LocalDate.of(2021, 1, 1), Duration.ofDays(20)),
+                new Training(3L, 1L, "Math training", mathType, LocalDate.of(2022, 1, 1), Duration.ofDays(20)),
+                new Training(3L, 2L, "Art training", artType, LocalDate.of(2020, 1, 1), Duration.ofDays(60)),
+                new Training(4L, 2L, "Art training", artType, LocalDate.of(2021, 1, 1), Duration.ofDays(60)),
+                new Training(5L, 2L, "Art training", artType, LocalDate.of(2022, 1, 1), Duration.ofDays(60)),
+                new Training(1L, 3L, "Computer science training", computerType, LocalDate.of(2020, 1, 1),
+                        Duration.ofDays(120)),
+                new Training(3L, 3L, "Computer science training", computerType, LocalDate.of(2021, 1, 1),
+                        Duration.ofDays(120)),
+                new Training(5L, 3L, "Computer science training", computerType, LocalDate.of(2022, 1, 1),
+                        Duration.ofDays(120)));
 
-		when(trainingRepository.findAll()).thenReturn(expectedTrainingList.stream());
+        when(trainingRepository.findAll()).thenReturn(expectedTrainingList.stream());
 
-		List<TrainingDto> resultingDtoList = trainingService.findAll().toList();
-		List<TrainingDto> expectedDtoList = expectedTrainingList.stream().map(trainingMapper::toDto).toList();
+        List<TrainingDto> resultingDtoList = trainingService.findAll().toList();
+        List<TrainingDto> expectedDtoList = expectedTrainingList.stream().map(trainingMapper::toDto).toList();
 
-		assertEquals(expectedDtoList, resultingDtoList);
-		verify(trainingRepository).findAll();
-	}
+        assertEquals(expectedDtoList, resultingDtoList);
+        verify(trainingRepository).findAll();
+    }
 
-	@Test
-	@DisplayName("findAll throws exception if training repository throws exception")
-	void testFindAll_shouldThrowEntityQueryException_ifTrainingRepositoryThrowsException() {
-		when(trainingRepository.findAll()).thenThrow(RuntimeException.class);
+    @Test
+    @DisplayName("findAll throws exception if training repository throws exception")
+    void testFindAll_shouldThrowEntityQueryException_ifTrainingRepositoryThrowsException() {
+        when(trainingRepository.findAll()).thenThrow(RuntimeException.class);
 
-		assertThrows(EntityQueryException.class, () -> trainingService.findAll());
-		verify(trainingRepository).findAll();
-	}
+        assertThrows(EntityQueryException.class, () -> trainingService.findAll());
+        verify(trainingRepository).findAll();
+    }
 
 }

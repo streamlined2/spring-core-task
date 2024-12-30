@@ -8,10 +8,10 @@ import com.streamlined.tasks.entity.Training.TrainingKey;
 
 public interface TrainingService {
 
-	void create(TrainingDto dto);
+    void create(TrainingDto dto);
 
-	Optional<TrainingDto> findById(TrainingKey key);
+    Optional<TrainingDto> findById(TrainingKey key);
 
-	Stream<TrainingDto> findAll();
+    Stream<TrainingDto> findAll();
 
 }

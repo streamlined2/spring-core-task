@@ -9,8 +9,8 @@ import com.streamlined.tasks.entity.Training;
 @Component
 public class TrainingParser extends Parser<Training.TrainingKey, Training> {
 
-	public TrainingParser(CsvMapper csvMapper, @Value("${source.csv.training}") String sourceFileName) {
-		super(Training.class, csvMapper, sourceFileName);
-	}
+    public TrainingParser(CsvMapper csvMapper, @Value("${source.csv.training}") String sourceFileName) {
+        super(Training.class, csvMapper, sourceFileName);
+    }
 
 }

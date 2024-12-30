@@ -8,14 +8,14 @@ import com.streamlined.tasks.entity.Trainee;
 @Component
 public class TraineeMapper {
 
-	public Trainee toEntity(TraineeDto dto) {
-		return new Trainee(dto.userId(), dto.firstName(), dto.lastName(), dto.userName(), null, dto.isActive(),
-				dto.dateOfBirth(), dto.address());
-	}
+    public Trainee toEntity(TraineeDto dto) {
+        return new Trainee(dto.userId(), dto.firstName(), dto.lastName(), dto.userName(), null, dto.isActive(),
+                dto.dateOfBirth(), dto.address());
+    }
 
-	public TraineeDto toDto(Trainee entity) {
-		return new TraineeDto(entity.getUserId(), entity.getFirstName(), entity.getLastName(), entity.getUserName(),
-				entity.isActive(), entity.getDateOfBirth(), entity.getAddress());
-	}
+    public TraineeDto toDto(Trainee entity) {
+        return new TraineeDto(entity.getUserId(), entity.getFirstName(), entity.getLastName(), entity.getUserName(),
+                entity.isActive(), entity.getDateOfBirth(), entity.getAddress());
+    }
 
 }

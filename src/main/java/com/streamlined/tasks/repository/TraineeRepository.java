@@ -7,16 +7,16 @@ import com.streamlined.tasks.entity.Trainee;
 
 public interface TraineeRepository {
 
-	void create(Trainee entity);
+    void create(Trainee entity);
 
-	void update(Trainee entity);
+    void update(Trainee entity);
 
-	void deleteById(Long id);
+    void deleteById(Long id);
 
-	Optional<Trainee> findById(Long id);
+    Optional<Trainee> findById(Long id);
 
-	Stream<Trainee> findAll();
+    Stream<Trainee> findAll();
 
-	Optional<String> getMaxUsernameSerial(String firstName, String lastName);
+    Optional<String> getMaxUsernameSerial(String firstName, String lastName);
 
 }
