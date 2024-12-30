@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.streamlined.tasks.entity.Trainer;
@@ -21,6 +22,7 @@ public class TrainerStorage {
 		trainerMap = new HashMap<>();
 	}
 
+	@Autowired
 	public TrainerStorage(TrainerParser trainerParser) {
 		this();
 		this.trainerParser = trainerParser;
