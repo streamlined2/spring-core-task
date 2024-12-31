@@ -1,32 +1,37 @@
 package com.streamlined.tasks.service;
 
-import java.security.SecureRandom;
 import java.util.Random;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class DefaultSecurityService implements SecurityService {
 
-    private static final int PASSWORD_LENGTH = 10;
-    private static final char START_PASSWORD_CHAR = '\u0021';
-    private static final char END_PASSWORD_CHAR = '\u007F';
-    private static final int SALT_OFFSET = 10;
-
     private final PasswordEncoder passwordEncoder;
     private final Random random;
+    private final int passwordLength;
+    private final char startPasswordChar;
+    private final char endPasswordChar;
+    private final int saltOffset;
 
-    public DefaultSecurityService(PasswordEncoder passwordEncoder) {
+    public DefaultSecurityService(PasswordEncoder passwordEncoder, Random random,
+            @Value("${password.length}") int passwordLength, @Value("${password.startchar}") char startPasswordChar,
+            @Value("${password.endchar}") char endPasswordChar, @Value("${password.saltoffset}") int saltOffset) {
         this.passwordEncoder = passwordEncoder;
-        random = new SecureRandom();
+        this.random = random;
+        this.passwordLength = passwordLength;
+        this.startPasswordChar = startPasswordChar;
+        this.endPasswordChar = endPasswordChar;
+        this.saltOffset = saltOffset;
     }
 
     @Override
     public char[] getNewPassword() {
-        char[] password = new char[PASSWORD_LENGTH];
-        for (int k = 0; k < PASSWORD_LENGTH; k++) {
-            password[k] = (char) random.nextInt(START_PASSWORD_CHAR, END_PASSWORD_CHAR);
+        char[] password = new char[passwordLength];
+        for (int k = 0; k < passwordLength; k++) {
+            password[k] = (char) random.nextInt(startPasswordChar, endPasswordChar);
         }
         return password;
     }
@@ -36,7 +41,7 @@ public class DefaultSecurityService implements SecurityService {
         StringBuilder builder = new StringBuilder();
         builder.append(password);
         for (int k = 0; k < builder.length(); k++) {
-            char c = (char) (builder.charAt(k) + SALT_OFFSET);
+            char c = (char) (builder.charAt(k) + saltOffset);
             builder.setCharAt(k, c);
         }
         return passwordEncoder.encode(builder);

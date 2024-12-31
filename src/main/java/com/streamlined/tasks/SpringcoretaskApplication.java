@@ -1,11 +1,15 @@
 package com.streamlined.tasks;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.util.Objects;
+import java.util.Random;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,6 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.streamlined.tasks.dto.TraineeDto;
+import com.streamlined.tasks.exception.MissingAlgorithmException;
 import com.streamlined.tasks.service.TraineeService;
 import com.streamlined.tasks.service.TrainerService;
 import com.streamlined.tasks.service.TrainingService;
@@ -35,6 +40,8 @@ public class SpringcoretaskApplication implements CommandLineRunner {
     @Lazy
     private TrainingService trainingService;
 
+    private @Value("${algorithm.random}") String algorithmName;
+
     private static final Logger log = LoggerFactory.getLogger(SpringcoretaskApplication.class);
 
     public static void main(String[] args) {
@@ -51,6 +58,16 @@ public class SpringcoretaskApplication implements CommandLineRunner {
         CsvMapper csvMapper = new CsvMapper();
         csvMapper.registerModule(new JavaTimeModule());
         return csvMapper;
+    }
+
+    @Bean
+    Random random() {
+        try {
+            return SecureRandom.getInstance(algorithmName);
+        } catch (NoSuchAlgorithmException e) {
+            log.error("Missing random generator algorithm");
+            throw new MissingAlgorithmException("Missing random generator algorithm", e);
+        }
     }
 
     @Override
