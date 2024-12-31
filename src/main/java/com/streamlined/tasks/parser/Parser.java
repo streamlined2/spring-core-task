@@ -15,7 +15,7 @@ import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.streamlined.tasks.entity.Entity;
 import com.streamlined.tasks.exception.ParseException;
 
-public abstract class Parser<K, T extends Entity<K>> {
+public class Parser<K, T extends Entity<K>> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Parser.class);
 
@@ -23,7 +23,7 @@ public abstract class Parser<K, T extends Entity<K>> {
     private final String sourceFileName;
     private final Class<T> entityClass;
 
-    protected Parser(Class<T> entityClass, CsvMapper csvMapper, String sourceFileName) {
+    public Parser(Class<T> entityClass, CsvMapper csvMapper, String sourceFileName) {
         this.entityClass = entityClass;
         this.csvMapper = csvMapper;
         this.sourceFileName = sourceFileName;

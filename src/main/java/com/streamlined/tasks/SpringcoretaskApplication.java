@@ -22,7 +22,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.streamlined.tasks.dto.TraineeDto;
+import com.streamlined.tasks.entity.Trainee;
+import com.streamlined.tasks.entity.Trainer;
+import com.streamlined.tasks.entity.Training;
 import com.streamlined.tasks.exception.MissingAlgorithmException;
+import com.streamlined.tasks.parser.Parser;
 import com.streamlined.tasks.service.TraineeService;
 import com.streamlined.tasks.service.TrainerService;
 import com.streamlined.tasks.service.TrainingService;
@@ -68,6 +72,21 @@ public class SpringcoretaskApplication implements CommandLineRunner {
             LOGGER.error("Missing random generator algorithm {}", algorithmName, e);
             throw new MissingAlgorithmException("Missing random generator algorithm", e);
         }
+    }
+
+    @Bean("traineeParser")
+    Parser<Long, Trainee> traineeParser(@Value("${source.csv.trainee}") String sourceFileName) {
+        return new Parser<>(Trainee.class, csvMapper(), sourceFileName);
+    }
+
+    @Bean("trainerParser")
+    Parser<Long, Trainer> trainerParser(@Value("${source.csv.trainer}") String sourceFileName) {
+        return new Parser<>(Trainer.class, csvMapper(), sourceFileName);
+    }
+
+    @Bean("trainingParser")
+    Parser<Training.TrainingKey, Training> trainingParser(@Value("${source.csv.training}") String sourceFileName) {
+        return new Parser<>(Training.class, csvMapper(), sourceFileName);
     }
 
     @Override
