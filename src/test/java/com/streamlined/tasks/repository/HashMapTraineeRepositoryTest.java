@@ -16,16 +16,16 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.streamlined.tasks.entity.Trainee;
 import com.streamlined.tasks.exception.EntityAlreadyExistsException;
 import com.streamlined.tasks.exception.NoSuchEntityException;
-import com.streamlined.tasks.storage.TraineeStorage;
+import com.streamlined.tasks.storage.HashMapTraineeStorage;
 
 @ExtendWith(MockitoExtension.class)
-class DefaultTraineeRepositoryTest {
+class HashMapTraineeRepositoryTest {
 
     @Spy
-    private TraineeStorage traineeStorage;
+    private HashMapTraineeStorage traineeStorage;
 
     @InjectMocks
-    private DefaultTraineeRepository traineeRepository;
+    private HashMapTraineeRepository traineeRepository;
 
     @Test
     @DisplayName("create should create new trainee entity if entity with such id does not exist")

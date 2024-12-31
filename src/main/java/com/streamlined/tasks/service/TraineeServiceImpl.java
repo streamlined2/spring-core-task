@@ -18,15 +18,15 @@ import com.streamlined.tasks.mapper.TraineeMapper;
 import com.streamlined.tasks.repository.TraineeRepository;
 
 @Service
-public class DefaultTraineeService implements TraineeService {
+public class TraineeServiceImpl implements TraineeService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultTraineeService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TraineeServiceImpl.class);
 
     private final TraineeMapper traineeMapper;
     private final TraineeRepository traineeRepository;
     private final SecurityService securityService;
 
-    public DefaultTraineeService(TraineeMapper traineeMapper, TraineeRepository traineeRepository,
+    public TraineeServiceImpl(TraineeMapper traineeMapper, TraineeRepository traineeRepository,
             SecurityService securityService) {
         this.traineeMapper = traineeMapper;
         this.traineeRepository = traineeRepository;

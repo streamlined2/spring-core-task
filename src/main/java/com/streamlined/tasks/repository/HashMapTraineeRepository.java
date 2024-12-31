@@ -9,14 +9,14 @@ import org.springframework.stereotype.Repository;
 import com.streamlined.tasks.entity.Trainee;
 import com.streamlined.tasks.exception.EntityAlreadyExistsException;
 import com.streamlined.tasks.exception.NoSuchEntityException;
-import com.streamlined.tasks.storage.TraineeStorage;
+import com.streamlined.tasks.storage.HashMapTraineeStorage;
 
 @Repository
-public class DefaultTraineeRepository implements TraineeRepository {
+public class HashMapTraineeRepository implements TraineeRepository {
 
-    private final TraineeStorage traineeStorage;
+    private final HashMapTraineeStorage traineeStorage;
 
-    public DefaultTraineeRepository(TraineeStorage traineeStorage) {
+    public HashMapTraineeRepository(HashMapTraineeStorage traineeStorage) {
         this.traineeStorage = traineeStorage;
     }
 

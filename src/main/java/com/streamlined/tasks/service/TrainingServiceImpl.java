@@ -16,14 +16,14 @@ import com.streamlined.tasks.mapper.TrainingMapper;
 import com.streamlined.tasks.repository.TrainingRepository;
 
 @Service
-public class DefaultTrainingService implements TrainingService {
+public class TrainingServiceImpl implements TrainingService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultTrainingService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TrainingServiceImpl.class);
 
     private final TrainingMapper trainingMapper;
     private final TrainingRepository trainingRepository;
 
-    public DefaultTrainingService(TrainingMapper trainingMapper, TrainingRepository trainingRepository) {
+    public TrainingServiceImpl(TrainingMapper trainingMapper, TrainingRepository trainingRepository) {
         this.trainingMapper = trainingMapper;
         this.trainingRepository = trainingRepository;
     }

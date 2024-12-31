@@ -7,7 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DefaultSecurityService implements SecurityService {
+public class SecurityServiceImpl implements SecurityService {
 
     private final PasswordEncoder passwordEncoder;
     private final Random random;
@@ -16,7 +16,7 @@ public class DefaultSecurityService implements SecurityService {
     private final char endPasswordChar;
     private final int saltOffset;
 
-    public DefaultSecurityService(PasswordEncoder passwordEncoder, Random random,
+    public SecurityServiceImpl(PasswordEncoder passwordEncoder, Random random,
             @Value("${password.length}") int passwordLength, @Value("${password.startchar}") char startPasswordChar,
             @Value("${password.endchar}") char endPasswordChar, @Value("${password.saltoffset}") int saltOffset) {
         this.passwordEncoder = passwordEncoder;

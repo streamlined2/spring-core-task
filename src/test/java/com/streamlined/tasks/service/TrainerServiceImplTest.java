@@ -33,7 +33,7 @@ import com.streamlined.tasks.mapper.TrainerMapper;
 import com.streamlined.tasks.repository.TrainerRepository;
 
 @ExtendWith(MockitoExtension.class)
-class DefaultTrainerServiceTest {
+class TrainerServiceImplTest {
 
     @Mock
     private TrainerRepository trainerRepository;
@@ -45,7 +45,7 @@ class DefaultTrainerServiceTest {
     private SecurityService securityService;
 
     @InjectMocks
-    private DefaultTrainerService trainerService;
+    private TrainerServiceImpl trainerService;
 
     @Test
     @DisplayName("create adds new entity")

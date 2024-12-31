@@ -18,15 +18,15 @@ import com.streamlined.tasks.mapper.TrainerMapper;
 import com.streamlined.tasks.repository.TrainerRepository;
 
 @Service
-public class DefaultTrainerService implements TrainerService {
+public class TrainerServiceImpl implements TrainerService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultTrainerService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TrainerServiceImpl.class);
 
     private final TrainerMapper trainerMapper;
     private final TrainerRepository trainerRepository;
     private final SecurityService securityService;
 
-    public DefaultTrainerService(TrainerMapper trainerMapper, TrainerRepository trainerRepository,
+    public TrainerServiceImpl(TrainerMapper trainerMapper, TrainerRepository trainerRepository,
             SecurityService securityService) {
         this.trainerMapper = trainerMapper;
         this.trainerRepository = trainerRepository;

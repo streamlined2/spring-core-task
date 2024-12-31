@@ -33,7 +33,7 @@ import com.streamlined.tasks.mapper.TrainingMapper;
 import com.streamlined.tasks.repository.TrainingRepository;
 
 @ExtendWith(MockitoExtension.class)
-class DefaultTrainingServiceTest {
+class TrainingServiceImplTest {
 
     @Mock
     private TrainingRepository trainingRepository;
@@ -42,7 +42,7 @@ class DefaultTrainingServiceTest {
     private TrainingMapper trainingMapper;
 
     @InjectMocks
-    private DefaultTrainingService trainingService;
+    private TrainingServiceImpl trainingService;
 
     private static TrainingType mathType;
     private static TrainingType artType;

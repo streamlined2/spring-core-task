@@ -13,17 +13,17 @@ import com.streamlined.tasks.parser.TrainerParser;
 import jakarta.annotation.PostConstruct;
 
 @Component
-public class TrainerStorage {
+public class HashMapTrainerStorage {
 
     private final Map<Long, Trainer> trainerMap;
     private TrainerParser trainerParser;
 
-    public TrainerStorage() {
+    public HashMapTrainerStorage() {
         trainerMap = new HashMap<>();
     }
 
     @Autowired
-    public TrainerStorage(TrainerParser trainerParser) {
+    public HashMapTrainerStorage(TrainerParser trainerParser) {
         this();
         this.trainerParser = trainerParser;
     }
