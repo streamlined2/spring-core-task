@@ -10,16 +10,16 @@ import com.streamlined.tasks.parser.Parser;
 
 import jakarta.annotation.PostConstruct;
 
-public abstract class HashMapStorage<K, T extends Entity<K>> {
+public class HashMapStorage<K, T extends Entity<K>> {
 
     private final Map<K, T> entityMap;
     private Parser<K, T> parser;
 
-    protected HashMapStorage() {
+    public HashMapStorage() {
         entityMap = new HashMap<>();
     }
 
-    protected HashMapStorage(Parser<K, T> parser) {
+    public HashMapStorage(Parser<K, T> parser) {
         this();
         this.parser = parser;
     }

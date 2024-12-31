@@ -16,13 +16,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.streamlined.tasks.entity.Trainee;
 import com.streamlined.tasks.exception.EntityAlreadyExistsException;
 import com.streamlined.tasks.exception.NoSuchEntityException;
-import com.streamlined.tasks.storage.HashMapTraineeStorage;
+import com.streamlined.tasks.storage.HashMapStorage;
 
 @ExtendWith(MockitoExtension.class)
 class HashMapTraineeRepositoryTest {
 
     @Spy
-    private HashMapTraineeStorage traineeStorage;
+    private HashMapStorage<Long, Trainee> traineeStorage;
 
     @InjectMocks
     private HashMapTraineeRepository traineeRepository;

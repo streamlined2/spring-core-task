@@ -30,6 +30,7 @@ import com.streamlined.tasks.parser.Parser;
 import com.streamlined.tasks.service.TraineeService;
 import com.streamlined.tasks.service.TrainerService;
 import com.streamlined.tasks.service.TrainingService;
+import com.streamlined.tasks.storage.HashMapStorage;
 
 @SpringBootApplication
 public class SpringcoretaskApplication implements CommandLineRunner {
@@ -87,6 +88,22 @@ public class SpringcoretaskApplication implements CommandLineRunner {
     @Bean("trainingParser")
     Parser<Training.TrainingKey, Training> trainingParser(@Value("${source.csv.training}") String sourceFileName) {
         return new Parser<>(Training.class, csvMapper(), sourceFileName);
+    }
+
+    @Bean("traineeStorage")
+    HashMapStorage<Long, Trainee> traineeStorage(@Value("${source.csv.trainee}") String sourceFileName) {
+        return new HashMapStorage<>(traineeParser(sourceFileName));
+    }
+
+    @Bean("trainerStorage")
+    HashMapStorage<Long, Trainer> trainerStorage(@Value("${source.csv.trainer}") String sourceFileName) {
+        return new HashMapStorage<>(trainerParser(sourceFileName));
+    }
+
+    @Bean("trainingStorage")
+    HashMapStorage<Training.TrainingKey, Training> trainingStorage(
+            @Value("${source.csv.training}") String sourceFileName) {
+        return new HashMapStorage<>(trainingParser(sourceFileName));
     }
 
     @Override

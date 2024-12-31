@@ -4,19 +4,20 @@ import java.util.Comparator;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import com.streamlined.tasks.entity.Trainer;
 import com.streamlined.tasks.exception.EntityAlreadyExistsException;
 import com.streamlined.tasks.exception.NoSuchEntityException;
-import com.streamlined.tasks.storage.HashMapTrainerStorage;
+import com.streamlined.tasks.storage.HashMapStorage;
 
 @Repository
 public class HashMapTrainerRepository implements TrainerRepository {
 
-    private final HashMapTrainerStorage trainerStorage;
+    private final HashMapStorage<Long, Trainer> trainerStorage;
 
-    public HashMapTrainerRepository(HashMapTrainerStorage trainerStorage) {
+    public HashMapTrainerRepository(@Qualifier("trainerStorage") HashMapStorage<Long, Trainer> trainerStorage) {
         this.trainerStorage = trainerStorage;
     }
 
