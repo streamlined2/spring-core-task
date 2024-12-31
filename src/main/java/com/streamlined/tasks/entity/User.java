@@ -15,14 +15,18 @@ public abstract class User implements Entity<Long> {
     protected User() {
     }
 
-    protected User(Long userId, String firstName, String lastName, String userName, String passwordHash,
-            boolean isActive) {
+    protected User(Long userId, String firstName, String lastName, String userName, boolean isActive) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.userName = userName;
-        this.passwordHash = passwordHash;
         this.isActive = isActive;
+    }
+
+    protected User(Long userId, String firstName, String lastName, String userName, String passwordHash,
+            boolean isActive) {
+        this(userId, firstName, lastName, userName, isActive);
+        this.passwordHash = passwordHash;
     }
 
     public boolean userNameStartsWith(String firstName, String lastName) {
