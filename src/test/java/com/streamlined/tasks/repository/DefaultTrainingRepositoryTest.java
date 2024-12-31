@@ -51,7 +51,7 @@ class DefaultTrainingRepositoryTest {
         trainingRepository.create(training);
 
         assertEquals(1, trainingStorage.size());
-        Training savedTraining = trainingStorage.get(training.getTrainingKey());
+        Training savedTraining = trainingStorage.get(training.getPrimaryKey());
         assertNotNull(savedTraining);
         assertEquals(training.toString(), savedTraining.toString());
     }
@@ -66,7 +66,7 @@ class DefaultTrainingRepositoryTest {
 
         assertThrows(EntityAlreadyExistsException.class, () -> trainingRepository.create(training));
         assertEquals(1, trainingStorage.size());
-        Training savedTraining = trainingStorage.get(training.getTrainingKey());
+        Training savedTraining = trainingStorage.get(training.getPrimaryKey());
         assertNotNull(savedTraining);
         assertEquals(training.toString(), savedTraining.toString());
     }
@@ -79,7 +79,7 @@ class DefaultTrainingRepositoryTest {
                 Duration.ofDays(20));
         trainingStorage.saveNew(training);
 
-        Optional<Training> foundTraining = trainingRepository.findById(training.getTrainingKey());
+        Optional<Training> foundTraining = trainingRepository.findById(training.getPrimaryKey());
 
         assumeTrue(foundTraining.isPresent());
         assertSame(training, foundTraining.get());
@@ -95,7 +95,7 @@ class DefaultTrainingRepositoryTest {
         Training trainingToLookup = new Training(2L, 1L, "Math training", mathType, LocalDate.of(2021, 1, 1),
                 Duration.ofDays(20));
 
-        Optional<Training> foundTraining = trainingRepository.findById(trainingToLookup.getTrainingKey());
+        Optional<Training> foundTraining = trainingRepository.findById(trainingToLookup.getPrimaryKey());
 
         assertTrue(foundTraining.isEmpty());
     }
@@ -114,10 +114,10 @@ class DefaultTrainingRepositoryTest {
         List<Training> foundTrainings = trainingRepository.findAll().toList();
 
         assertEquals(2, foundTrainings.size());
-        Training foundTraining = trainingStorage.get(training1.getTrainingKey());
+        Training foundTraining = trainingStorage.get(training1.getPrimaryKey());
         assertNotNull(foundTraining);
         assertEquals(training1.toString(), foundTraining.toString());
-        foundTraining = trainingStorage.get(training2.getTrainingKey());
+        foundTraining = trainingStorage.get(training2.getPrimaryKey());
         assertNotNull(foundTraining);
         assertEquals(training2.toString(), foundTraining.toString());
     }

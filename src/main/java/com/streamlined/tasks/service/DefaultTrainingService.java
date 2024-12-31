@@ -18,7 +18,7 @@ import com.streamlined.tasks.repository.TrainingRepository;
 @Service
 public class DefaultTrainingService implements TrainingService {
 
-    private static final Logger log = LoggerFactory.getLogger(DefaultTrainingService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultTrainingService.class);
 
     private final TrainingMapper trainingMapper;
     private final TrainingRepository trainingRepository;
@@ -34,7 +34,7 @@ public class DefaultTrainingService implements TrainingService {
             Training training = trainingMapper.toEntity(dto);
             trainingRepository.create(training);
         } catch (Exception e) {
-            log.error("Error creating training entity", e);
+            LOGGER.debug("Error creating training entity", e);
             throw new EntityCreationException("Error creating training entity", e);
         }
     }
@@ -44,7 +44,7 @@ public class DefaultTrainingService implements TrainingService {
         try {
             return trainingRepository.findById(key).map(trainingMapper::toDto);
         } catch (Exception e) {
-            log.error("Error querying training entity", e);
+            LOGGER.debug("Error querying training entity", e);
             throw new EntityQueryException("Error querying training entity", e);
         }
     }
@@ -54,7 +54,7 @@ public class DefaultTrainingService implements TrainingService {
         try {
             return trainingRepository.findAll().map(trainingMapper::toDto);
         } catch (Exception e) {
-            log.error("Error querying training entity", e);
+            LOGGER.debug("Error querying training entity", e);
             throw new EntityQueryException("Error querying training entity", e);
         }
     }

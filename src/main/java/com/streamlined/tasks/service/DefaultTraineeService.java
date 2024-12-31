@@ -20,7 +20,7 @@ import com.streamlined.tasks.repository.TraineeRepository;
 @Service
 public class DefaultTraineeService implements TraineeService {
 
-    private static final Logger log = LoggerFactory.getLogger(DefaultTraineeService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultTraineeService.class);
 
     private final TraineeMapper traineeMapper;
     private final TraineeRepository traineeRepository;
@@ -41,7 +41,7 @@ public class DefaultTraineeService implements TraineeService {
             trainee.setNextUsernameSerial(traineeRepository.getMaxUsernameSerial(dto.firstName(), dto.lastName()));
             traineeRepository.create(trainee);
         } catch (Exception e) {
-            log.error("Error creating trainee entity", e);
+            LOGGER.debug("Error creating trainee entity", e);
             throw new EntityCreationException("Error creating trainee entity", e);
         }
     }
@@ -56,7 +56,7 @@ public class DefaultTraineeService implements TraineeService {
             newTrainee.setUserName(trainee.getUserName());
             traineeRepository.update(newTrainee);
         } catch (Exception e) {
-            log.error("Error updating trainee entity", e);
+            LOGGER.debug("Error updating trainee entity", e);
             throw new EntityUpdateException("Error updating trainee entity", e);
         }
     }
@@ -69,7 +69,7 @@ public class DefaultTraineeService implements TraineeService {
             trainee.setPasswordHash(securityService.getPasswordHash(password));
             traineeRepository.update(trainee);
         } catch (Exception e) {
-            log.error("Error updating password for trainee entity", e);
+            LOGGER.debug("Error updating password for trainee entity", e);
             throw new EntityUpdateException("Error updating password for trainee entity", e);
         }
     }
@@ -79,7 +79,7 @@ public class DefaultTraineeService implements TraineeService {
         try {
             traineeRepository.deleteById(id);
         } catch (Exception e) {
-            log.error("Error deleting trainee entity", e);
+            LOGGER.debug("Error deleting trainee entity", e);
             throw new EntityDeletionException("Error deleting trainee entity", e);
         }
     }
@@ -89,7 +89,7 @@ public class DefaultTraineeService implements TraineeService {
         try {
             return traineeRepository.findById(id).map(traineeMapper::toDto);
         } catch (Exception e) {
-            log.error("Error querying trainee entity", e);
+            LOGGER.debug("Error querying trainee entity", e);
             throw new EntityQueryException("Error querying trainee entity", e);
         }
     }
@@ -99,7 +99,7 @@ public class DefaultTraineeService implements TraineeService {
         try {
             return traineeRepository.findAll().map(traineeMapper::toDto);
         } catch (Exception e) {
-            log.error("Error querying trainee entity", e);
+            LOGGER.debug("Error querying trainee entity", e);
             throw new EntityQueryException("Error querying trainee entity", e);
         }
     }

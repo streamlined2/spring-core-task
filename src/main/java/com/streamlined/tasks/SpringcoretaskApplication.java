@@ -30,6 +30,8 @@ import com.streamlined.tasks.service.TrainingService;
 @SpringBootApplication
 public class SpringcoretaskApplication implements CommandLineRunner {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(SpringcoretaskApplication.class);
+
     @Autowired
     @Lazy
     private TraineeService traineeService;
@@ -41,8 +43,6 @@ public class SpringcoretaskApplication implements CommandLineRunner {
     private TrainingService trainingService;
 
     private @Value("${algorithm.random}") String algorithmName;
-
-    private static final Logger log = LoggerFactory.getLogger(SpringcoretaskApplication.class);
 
     public static void main(String[] args) {
         SpringApplication.run(SpringcoretaskApplication.class, args);
@@ -65,7 +65,7 @@ public class SpringcoretaskApplication implements CommandLineRunner {
         try {
             return SecureRandom.getInstance(algorithmName);
         } catch (NoSuchAlgorithmException e) {
-            log.error("Missing random generator algorithm");
+            LOGGER.error("Missing random generator algorithm {}", algorithmName, e);
             throw new MissingAlgorithmException("Missing random generator algorithm", e);
         }
     }
@@ -81,12 +81,12 @@ public class SpringcoretaskApplication implements CommandLineRunner {
             dto = new TraineeDto(102L, "Jack", "Fantasy", "Jack.Fantasy", true, LocalDate.of(2000, 1, 1), "");
             traineeService.create(dto, "pass".toCharArray());
 
-            traineeService.findAll().map(Objects::toString).forEach(log::info);
-            trainerService.findAll().map(Objects::toString).forEach(log::info);
-            trainingService.findAll().map(Objects::toString).forEach(log::info);
+            traineeService.findAll().map(Objects::toString).forEach(LOGGER::info);
+            trainerService.findAll().map(Objects::toString).forEach(LOGGER::info);
+            trainingService.findAll().map(Objects::toString).forEach(LOGGER::info);
 
         } catch (Exception e) {
-            log.error("Error while executing application: {}", e.getMessage(), e);
+            LOGGER.error("Error while executing application: {}", e.getMessage(), e);
         }
 
     }

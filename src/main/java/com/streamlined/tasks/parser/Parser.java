@@ -17,7 +17,7 @@ import com.streamlined.tasks.exception.ParseException;
 
 public abstract class Parser<K, T extends Entity<K>> {
 
-    private static final Logger log = LoggerFactory.getLogger(Parser.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Parser.class);
 
     private final CsvMapper csvMapper;
     private final String sourceFileName;
@@ -41,7 +41,7 @@ public abstract class Parser<K, T extends Entity<K>> {
             }
             return entityMap;
         } catch (Exception e) {
-            log.error("Cannot parse input data", e);
+            LOGGER.error("Cannot parse input data", e);
             throw new ParseException("Cannot parse input data", e);
         }
     }

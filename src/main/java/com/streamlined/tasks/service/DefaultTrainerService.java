@@ -20,7 +20,7 @@ import com.streamlined.tasks.repository.TrainerRepository;
 @Service
 public class DefaultTrainerService implements TrainerService {
 
-    private static final Logger log = LoggerFactory.getLogger(DefaultTrainerService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultTrainerService.class);
 
     private final TrainerMapper trainerMapper;
     private final TrainerRepository trainerRepository;
@@ -41,7 +41,7 @@ public class DefaultTrainerService implements TrainerService {
             trainer.setNextUsernameSerial(trainerRepository.getMaxUsernameSerial(dto.firstName(), dto.lastName()));
             trainerRepository.create(trainer);
         } catch (Exception e) {
-            log.error("Error creating trainer entity", e);
+            LOGGER.debug("Error creating trainer entity", e);
             throw new EntityCreationException("Error creating trainer entity", e);
         }
     }
@@ -56,7 +56,7 @@ public class DefaultTrainerService implements TrainerService {
             newTrainer.setUserName(trainer.getUserName());
             trainerRepository.update(newTrainer);
         } catch (Exception e) {
-            log.error("Error updating trainer entity", e);
+            LOGGER.debug("Error updating trainer entity", e);
             throw new EntityUpdateException("Error updating trainer entity", e);
         }
     }
@@ -69,7 +69,7 @@ public class DefaultTrainerService implements TrainerService {
             trainer.setPasswordHash(securityService.getPasswordHash(password));
             trainerRepository.update(trainer);
         } catch (Exception e) {
-            log.error("Error updating password for trainer entity", e);
+            LOGGER.debug("Error updating password for trainer entity", e);
             throw new EntityUpdateException("Error updating password for trainer entity", e);
         }
     }
@@ -79,7 +79,7 @@ public class DefaultTrainerService implements TrainerService {
         try {
             trainerRepository.deleteById(id);
         } catch (Exception e) {
-            log.error("Error deleting trainer entity", e);
+            LOGGER.debug("Error deleting trainer entity", e);
             throw new EntityDeletionException("Error deleting trainer entity", e);
         }
     }
@@ -89,7 +89,7 @@ public class DefaultTrainerService implements TrainerService {
         try {
             return trainerRepository.findById(id).map(trainerMapper::toDto);
         } catch (Exception e) {
-            log.error("Error querying trainer entity", e);
+            LOGGER.debug("Error querying trainer entity", e);
             throw new EntityQueryException("Error querying trainer entity", e);
         }
     }
@@ -99,7 +99,7 @@ public class DefaultTrainerService implements TrainerService {
         try {
             return trainerRepository.findAll().map(trainerMapper::toDto);
         } catch (Exception e) {
-            log.error("Error querying trainer entity", e);
+            LOGGER.debug("Error querying trainer entity", e);
             throw new EntityQueryException("Error querying trainer entity", e);
         }
     }

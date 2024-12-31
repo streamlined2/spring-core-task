@@ -34,7 +34,7 @@ public class TrainingStorage {
     }
 
     public Training saveNew(Training training) {
-        return trainingMap.putIfAbsent(training.getTrainingKey(), training);
+        return trainingMap.putIfAbsent(training.getPrimaryKey(), training);
     }
 
     public Training get(TrainingKey id) {

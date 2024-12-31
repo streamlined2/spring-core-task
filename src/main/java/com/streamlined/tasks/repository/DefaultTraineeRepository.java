@@ -4,8 +4,6 @@ import java.util.Comparator;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import com.streamlined.tasks.entity.Trainee;
@@ -15,8 +13,6 @@ import com.streamlined.tasks.storage.TraineeStorage;
 
 @Repository
 public class DefaultTraineeRepository implements TraineeRepository {
-
-    private static final Logger log = LoggerFactory.getLogger(DefaultTraineeRepository.class);
 
     private final TraineeStorage traineeStorage;
 
@@ -28,7 +24,6 @@ public class DefaultTraineeRepository implements TraineeRepository {
     public void create(Trainee trainee) {
         Trainee oldTrainee = traineeStorage.saveNew(trainee);
         if (oldTrainee != null) {
-            log.warn("Trainee with id {} already exists", trainee.getUserId());
             throw new EntityAlreadyExistsException("Trainee with id %d already exists".formatted(trainee.getUserId()));
         }
     }
@@ -42,7 +37,6 @@ public class DefaultTraineeRepository implements TraineeRepository {
     public void deleteById(Long id) {
         Trainee trainee = traineeStorage.get(id);
         if (trainee == null) {
-            log.warn("No entity found with id {}", id);
             throw new NoSuchEntityException("No entity found with id %d".formatted(id));
         }
         traineeStorage.remove(id);

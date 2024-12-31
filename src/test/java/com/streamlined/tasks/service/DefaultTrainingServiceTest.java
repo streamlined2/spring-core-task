@@ -61,7 +61,7 @@ class DefaultTrainingServiceTest {
         Training training = new Training(5L, 2L, "Art training", artType, LocalDate.of(2022, 1, 1),
                 Duration.ofDays(60));
         TrainingDto trainingDto = trainingMapper.toDto(training);
-        TrainingKey trainingKey = training.getTrainingKey();
+        TrainingKey trainingKey = training.getPrimaryKey();
         List<Training> trainingList = new ArrayList<>(
                 List.of(new Training(1L, 1L, "Math training", mathType, LocalDate.of(2020, 1, 1), Duration.ofDays(20)),
                         new Training(2L, 1L, "Math training", mathType, LocalDate.of(2021, 1, 1), Duration.ofDays(20)),
@@ -88,7 +88,7 @@ class DefaultTrainingServiceTest {
 
         assertEquals(initialTrainingListSize + 1, trainingList.size());
         assertTrue(trainingList.contains(training));
-        Optional<Training> newTraining = trainingList.stream().filter(t -> t.getTrainingKey().equals(trainingKey))
+        Optional<Training> newTraining = trainingList.stream().filter(t -> t.getPrimaryKey().equals(trainingKey))
                 .findFirst();
         assertTrue(newTraining.isPresent());
         assertEquals(trainingDto, trainingMapper.toDto(newTraining.get()));
@@ -117,11 +117,11 @@ class DefaultTrainingServiceTest {
         Training expectedTraining = new Training(3L, 1L, "Math training", mathType, LocalDate.of(2022, 1, 1),
                 Duration.ofDays(20));
         TrainingDto expectedTrainingDto = trainingMapper.toDto(expectedTraining);
-        when(trainingRepository.findById(expectedTraining.getTrainingKey())).thenReturn(Optional.of(expectedTraining));
+        when(trainingRepository.findById(expectedTraining.getPrimaryKey())).thenReturn(Optional.of(expectedTraining));
 
-        Optional<TrainingDto> actualTrainingDto = trainingService.findById(expectedTraining.getTrainingKey());
+        Optional<TrainingDto> actualTrainingDto = trainingService.findById(expectedTraining.getPrimaryKey());
 
-        verify(trainingRepository).findById(expectedTraining.getTrainingKey());
+        verify(trainingRepository).findById(expectedTraining.getPrimaryKey());
         assertTrue(actualTrainingDto.isPresent());
         assertEquals(expectedTrainingDto, actualTrainingDto.get());
     }

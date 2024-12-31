@@ -28,10 +28,6 @@ public class Training implements Entity<com.streamlined.tasks.entity.Training.Tr
         this.duration = duration;
     }
 
-    public TrainingKey getTrainingKey() {
-        return new TrainingKey(traineeId, trainerId, date);
-    }
-
     public Long getTraineeId() {
         return traineeId;
     }
@@ -102,7 +98,7 @@ public class Training implements Entity<com.streamlined.tasks.entity.Training.Tr
 
     @Override
     public TrainingKey getPrimaryKey() {
-        return getTrainingKey();
+        return new TrainingKey(traineeId, trainerId, date);
     }
 
 }
