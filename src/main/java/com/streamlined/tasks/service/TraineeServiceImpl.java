@@ -5,6 +5,7 @@ import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.streamlined.tasks.dto.TraineeDto;
@@ -15,6 +16,9 @@ import com.streamlined.tasks.exception.EntityQueryException;
 import com.streamlined.tasks.exception.EntityUpdateException;
 import com.streamlined.tasks.exception.NoSuchEntityException;
 import com.streamlined.tasks.mapper.TraineeMapper;
+import com.streamlined.tasks.parser.Parser;
+
+import jakarta.annotation.PostConstruct;
 
 @Service
 public class TraineeServiceImpl extends UserServiceImpl implements TraineeService {
@@ -23,10 +27,18 @@ public class TraineeServiceImpl extends UserServiceImpl implements TraineeServic
 
     private final TraineeMapper traineeMapper;
     private final SecurityService securityService;
+    private final Parser<Long, Trainee> parser;
 
-    public TraineeServiceImpl(TraineeMapper traineeMapper, SecurityService securityService) {
+    public TraineeServiceImpl(TraineeMapper traineeMapper, SecurityService securityService,
+            @Qualifier("traineeParser") Parser<Long, Trainee> parser) {
         this.traineeMapper = traineeMapper;
         this.securityService = securityService;
+        this.parser = parser;
+    }
+
+    @PostConstruct
+    private void initilialize() {
+        traineeRepository.addAll(parser.parse());
     }
 
     @Override

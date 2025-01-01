@@ -1,5 +1,6 @@
 package com.streamlined.tasks.repository;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -20,5 +21,7 @@ public interface TraineeRepository {
     Stream<Trainee> findAll();
 
     Optional<String> getMaxUsernameSerial(String firstName, String lastName);
+
+    void addAll(Map<Long, Trainee> map);
 
 }

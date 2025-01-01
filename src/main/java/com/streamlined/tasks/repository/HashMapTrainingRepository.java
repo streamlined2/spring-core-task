@@ -1,5 +1,7 @@
 package com.streamlined.tasks.repository;
 
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -39,6 +41,11 @@ public class HashMapTrainingRepository implements TrainingRepository {
     @Override
     public Stream<Training> findAll() {
         return trainingStorage.getAll();
+    }
+
+    @Override
+    public void addAll(Map<Training.TrainingKey, Training> map) {
+        trainingStorage.addAll(map);
     }
 
 }

@@ -5,6 +5,7 @@ import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.streamlined.tasks.dto.TrainingDto;
@@ -13,7 +14,10 @@ import com.streamlined.tasks.entity.Training.TrainingKey;
 import com.streamlined.tasks.exception.EntityCreationException;
 import com.streamlined.tasks.exception.EntityQueryException;
 import com.streamlined.tasks.mapper.TrainingMapper;
+import com.streamlined.tasks.parser.Parser;
 import com.streamlined.tasks.repository.TrainingRepository;
+
+import jakarta.annotation.PostConstruct;
 
 @Service
 public class TrainingServiceImpl implements TrainingService {
@@ -22,10 +26,18 @@ public class TrainingServiceImpl implements TrainingService {
 
     private final TrainingMapper trainingMapper;
     private final TrainingRepository trainingRepository;
+    private final Parser<Training.TrainingKey, Training> parser;
 
-    public TrainingServiceImpl(TrainingMapper trainingMapper, TrainingRepository trainingRepository) {
+    public TrainingServiceImpl(TrainingMapper trainingMapper, TrainingRepository trainingRepository,
+            @Qualifier("trainingParser") Parser<Training.TrainingKey, Training> parser) {
         this.trainingMapper = trainingMapper;
         this.trainingRepository = trainingRepository;
+        this.parser = parser;
+    }
+
+    @PostConstruct
+    private void initilialize() {
+        trainingRepository.addAll(parser.parse());
     }
 
     @Override

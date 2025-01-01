@@ -2,33 +2,16 @@ package com.streamlined.tasks.storage;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Stream;
 
 import com.streamlined.tasks.entity.Entity;
-import com.streamlined.tasks.parser.Parser;
-
-import jakarta.annotation.PostConstruct;
 
 public class HashMapStorage<K, T extends Entity<K>> {
 
     private final Map<K, T> entityMap;
-    private Parser<K, T> parser;
 
     public HashMapStorage() {
         entityMap = new HashMap<>();
-    }
-
-    public HashMapStorage(Parser<K, T> parser) {
-        this();
-        this.parser = parser;
-    }
-
-    @PostConstruct
-    protected void initilialize() {
-        if (Objects.nonNull(parser)) {
-            entityMap.putAll(parser.parse());
-        }
     }
 
     public T saveNew(T entity) {
@@ -49,6 +32,10 @@ public class HashMapStorage<K, T extends Entity<K>> {
 
     public Stream<T> getAll() {
         return entityMap.values().stream();
+    }
+
+    public void addAll(Map<K, T> map) {
+        entityMap.putAll(map);
     }
 
     public void deleteAll() {

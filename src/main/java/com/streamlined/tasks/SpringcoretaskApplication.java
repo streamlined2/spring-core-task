@@ -115,18 +115,18 @@ public class SpringcoretaskApplication {
 
     @Bean("traineeStorage")
     HashMapStorage<Long, Trainee> traineeStorage(@Value("${source.csv.trainee}") String sourceFileName) {
-        return new HashMapStorage<>(traineeParser(sourceFileName));
+        return new HashMapStorage<>();
     }
 
     @Bean("trainerStorage")
     HashMapStorage<Long, Trainer> trainerStorage(@Value("${source.csv.trainer}") String sourceFileName) {
-        return new HashMapStorage<>(trainerParser(sourceFileName));
+        return new HashMapStorage<>();
     }
 
     @Bean("trainingStorage")
     HashMapStorage<Training.TrainingKey, Training> trainingStorage(
             @Value("${source.csv.training}") String sourceFileName) {
-        return new HashMapStorage<>(trainingParser(sourceFileName));
+        return new HashMapStorage<>();
     }
 
 }

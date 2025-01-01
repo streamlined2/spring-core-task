@@ -1,6 +1,7 @@
 package com.streamlined.tasks.repository;
 
 import java.util.Comparator;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -57,6 +58,11 @@ public class HashMapTrainerRepository implements TrainerRepository {
     public Optional<String> getMaxUsernameSerial(String firstName, String lastName) {
         return findAll().filter(trainer -> trainer.userNameStartsWith(firstName, lastName))
                 .map(Trainer::getUsernameSerial).max(Comparator.naturalOrder());
+    }
+
+    @Override
+    public void addAll(Map<Long, Trainer> map) {
+        trainerStorage.addAll(map);
     }
 
 }

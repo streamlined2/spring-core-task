@@ -1,5 +1,6 @@
 package com.streamlined.tasks.repository;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -14,5 +15,7 @@ public interface TrainingRepository {
     Optional<Training> findById(TrainingKey key);
 
     Stream<Training> findAll();
+
+    void addAll(Map<Training.TrainingKey, Training> map);
 
 }
