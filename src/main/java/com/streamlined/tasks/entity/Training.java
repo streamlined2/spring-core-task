@@ -4,7 +4,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.util.Objects;
 
-public class Training implements Entity<com.streamlined.tasks.entity.Training.TrainingKey> {
+public class Training implements Entity<Training.TrainingKey> {
 
     public record TrainingKey(Long traineeId, Long trainerId, LocalDate date) {
     }
