@@ -19,7 +19,7 @@ import com.streamlined.tasks.storage.HashMapStorage;
 
 @TestPropertySource(locations = "classpath:application-integration-test.properties")
 @SpringBootTest(classes = SpringcoretaskApplication.class, useMainMethod = UseMainMethod.NEVER)
-class SpringcoretaskApplicationTests {
+class SpringcoretaskApplicationIT {
 
     @Autowired
     private TraineeService traineeService;
