@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,10 +33,13 @@ import com.streamlined.tasks.exception.EntityUpdateException;
 import com.streamlined.tasks.exception.NoSuchEntityException;
 import com.streamlined.tasks.mapper.TraineeMapper;
 import com.streamlined.tasks.repository.TraineeRepository;
+import com.streamlined.tasks.repository.TrainerRepository;
 
 @ExtendWith(MockitoExtension.class)
 class TraineeServiceImplTest {
 
+    @Mock
+    private TrainerRepository trainerRepository;
     @Mock
     private TraineeRepository traineeRepository;
 
@@ -47,6 +51,12 @@ class TraineeServiceImplTest {
 
     @InjectMocks
     private TraineeServiceImpl traineeService;
+
+    @BeforeEach
+    void setup() {
+        traineeService.setTraineeRepository(traineeRepository);
+        traineeService.setTrainerRepository(trainerRepository);
+    }
 
     @Test
     @DisplayName("create adds new entity")

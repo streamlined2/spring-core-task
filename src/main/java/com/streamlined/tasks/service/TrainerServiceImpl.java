@@ -15,21 +15,17 @@ import com.streamlined.tasks.exception.EntityQueryException;
 import com.streamlined.tasks.exception.EntityUpdateException;
 import com.streamlined.tasks.exception.NoSuchEntityException;
 import com.streamlined.tasks.mapper.TrainerMapper;
-import com.streamlined.tasks.repository.TrainerRepository;
 
 @Service
-public class TrainerServiceImpl implements TrainerService {
+public class TrainerServiceImpl extends UserServiceImpl implements TrainerService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TrainerServiceImpl.class);
 
     private final TrainerMapper trainerMapper;
-    private final TrainerRepository trainerRepository;
     private final SecurityService securityService;
 
-    public TrainerServiceImpl(TrainerMapper trainerMapper, TrainerRepository trainerRepository,
-            SecurityService securityService) {
+    public TrainerServiceImpl(TrainerMapper trainerMapper, SecurityService securityService) {
         this.trainerMapper = trainerMapper;
-        this.trainerRepository = trainerRepository;
         this.securityService = securityService;
     }
 
@@ -38,7 +34,7 @@ public class TrainerServiceImpl implements TrainerService {
         try {
             Trainer trainer = trainerMapper.toEntity(dto);
             trainer.setPasswordHash(securityService.getPasswordHash(password));
-            trainer.setNextUsernameSerial(trainerRepository.getMaxUsernameSerial(dto.firstName(), dto.lastName()));
+            setNextUsernameSerial(trainer);
             trainerRepository.create(trainer);
         } catch (Exception e) {
             LOGGER.debug("Error creating trainer entity", e);

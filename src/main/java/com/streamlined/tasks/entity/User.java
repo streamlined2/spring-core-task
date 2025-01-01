@@ -1,7 +1,6 @@
 package com.streamlined.tasks.entity;
 
 import java.util.Objects;
-import java.util.Optional;
 
 public abstract class User implements Entity<Long> {
 
@@ -33,22 +32,16 @@ public abstract class User implements Entity<Long> {
         return getUserName().startsWith(getInitialUsername(firstName, lastName));
     }
 
-    public String getInitialUsername(String firstName, String lastName) {
+    private String getInitialUsername(String firstName, String lastName) {
         return firstName + "." + lastName;
     }
 
-    public String getUsernameSerial(String firstName, String lastName) {
+    public String getUsernameSerial() {
         return getUserName().substring(getInitialUsername(firstName, lastName).length());
     }
 
-    private void setUsernameSerial(String serial) {
+    public void setUsernameSerial(String serial) {
         userName = getInitialUsername(firstName, lastName) + serial;
-    }
-
-    public void setNextUsernameSerial(Optional<String> serial) {
-        String nextSerial = serial.map(value -> value.isBlank() ? "1" : Long.toString(Long.parseLong(value) + 1))
-                .orElse("");
-        setUsernameSerial(nextSerial);
     }
 
     public Long getUserId() {
@@ -114,7 +107,7 @@ public abstract class User implements Entity<Long> {
 
     @Override
     public Long getPrimaryKey() {
-        return userId;
+        return getUserId();
     }
 
 }

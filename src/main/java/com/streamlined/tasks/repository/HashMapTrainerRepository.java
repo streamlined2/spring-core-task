@@ -56,7 +56,7 @@ public class HashMapTrainerRepository implements TrainerRepository {
     @Override
     public Optional<String> getMaxUsernameSerial(String firstName, String lastName) {
         return findAll().filter(trainer -> trainer.userNameStartsWith(firstName, lastName))
-                .map(trainer -> trainer.getUsernameSerial(firstName, lastName)).max(Comparator.naturalOrder());
+                .map(Trainer::getUsernameSerial).max(Comparator.naturalOrder());
     }
 
 }

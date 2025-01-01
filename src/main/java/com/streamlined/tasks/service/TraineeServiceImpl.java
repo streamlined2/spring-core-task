@@ -15,21 +15,17 @@ import com.streamlined.tasks.exception.EntityQueryException;
 import com.streamlined.tasks.exception.EntityUpdateException;
 import com.streamlined.tasks.exception.NoSuchEntityException;
 import com.streamlined.tasks.mapper.TraineeMapper;
-import com.streamlined.tasks.repository.TraineeRepository;
 
 @Service
-public class TraineeServiceImpl implements TraineeService {
+public class TraineeServiceImpl extends UserServiceImpl implements TraineeService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TraineeServiceImpl.class);
 
     private final TraineeMapper traineeMapper;
-    private final TraineeRepository traineeRepository;
     private final SecurityService securityService;
 
-    public TraineeServiceImpl(TraineeMapper traineeMapper, TraineeRepository traineeRepository,
-            SecurityService securityService) {
+    public TraineeServiceImpl(TraineeMapper traineeMapper, SecurityService securityService) {
         this.traineeMapper = traineeMapper;
-        this.traineeRepository = traineeRepository;
         this.securityService = securityService;
     }
 
@@ -38,7 +34,7 @@ public class TraineeServiceImpl implements TraineeService {
         try {
             Trainee trainee = traineeMapper.toEntity(dto);
             trainee.setPasswordHash(securityService.getPasswordHash(password));
-            trainee.setNextUsernameSerial(traineeRepository.getMaxUsernameSerial(dto.firstName(), dto.lastName()));
+            setNextUsernameSerial(trainee);
             traineeRepository.create(trainee);
         } catch (Exception e) {
             LOGGER.debug("Error creating trainee entity", e);
