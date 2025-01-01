@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,6 +35,11 @@ class HashMapTrainingRepositoryTest {
     private static TrainingType artType;
     private static TrainingType computerType;
 
+    @BeforeEach
+    void setupEach() {
+        trainingStorage.deleteAll();
+    }
+
     @BeforeAll
     static void setup() {
         mathType = new TrainingType("math");
@@ -44,7 +50,6 @@ class HashMapTrainingRepositoryTest {
     @Test
     @DisplayName("create should create new training entity if entity with such id does not exist")
     void testCreate_shouldCreateNewTraining_ifTrainingEntityWithSuchIdDoesNotExist() {
-        trainingStorage.clear();
         Training training = new Training(1L, 1L, "Math training", mathType, LocalDate.of(2020, 1, 1),
                 Duration.ofDays(20));
 
@@ -59,7 +64,6 @@ class HashMapTrainingRepositoryTest {
     @Test
     @DisplayName("create should throw exception if entity with such id exists")
     void testCreate_shouldThrowException_ifTrainingEntityWithSuchIdExists() {
-        trainingStorage.clear();
         Training training = new Training(1L, 1L, "Math training", mathType, LocalDate.of(2020, 1, 1),
                 Duration.ofDays(20));
         trainingStorage.saveNew(training);
@@ -74,7 +78,6 @@ class HashMapTrainingRepositoryTest {
     @Test
     @DisplayName("findById should return training entity wrapped in Optional if entity with such id exists")
     void testFindById_shouldReturnTrainingEntity_ifTrainingEntityWithSuchIdExists() {
-        trainingStorage.clear();
         Training training = new Training(1L, 1L, "Math training", mathType, LocalDate.of(2020, 1, 1),
                 Duration.ofDays(20));
         trainingStorage.saveNew(training);
@@ -88,7 +91,6 @@ class HashMapTrainingRepositoryTest {
     @Test
     @DisplayName("findById should return empty Optional if entity with such id does not exist")
     void testFindById_shouldReturnEmptyOptional_ifTrainingEntityWithSuchIdDoesNotExist() {
-        trainingStorage.clear();
         Training training = new Training(1L, 1L, "Math training", mathType, LocalDate.of(2020, 1, 1),
                 Duration.ofDays(20));
         trainingStorage.saveNew(training);
@@ -103,7 +105,6 @@ class HashMapTrainingRepositoryTest {
     @Test
     @DisplayName("findAll should return all training entities storage contains")
     void testFindAll_shouldReturnAllTrainingEntitiesStorageContains() {
-        trainingStorage.clear();
         Training training1 = new Training(1L, 1L, "Math training", mathType, LocalDate.of(2020, 1, 1),
                 Duration.ofDays(20));
         trainingStorage.saveNew(training1);

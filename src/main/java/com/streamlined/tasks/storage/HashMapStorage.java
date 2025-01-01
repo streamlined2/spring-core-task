@@ -51,7 +51,7 @@ public class HashMapStorage<K, T extends Entity<K>> {
         return entityMap.values().stream();
     }
 
-    public void clear() {
+    public void deleteAll() {
         entityMap.clear();
     }
 

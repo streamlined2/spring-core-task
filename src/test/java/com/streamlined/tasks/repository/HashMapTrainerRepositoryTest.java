@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
 import java.util.Optional;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,10 +27,14 @@ class HashMapTrainerRepositoryTest {
     @InjectMocks
     private HashMapTrainerRepository trainerRepository;
 
+    @BeforeEach
+    void setupEach() {
+        trainerStorage.deleteAll();
+    }
+
     @Test
     @DisplayName("create should create new trainer entity if entity with such id does not exist")
     void testCreate_shouldCreateNewTrainer_ifTrainerEntityWithSuchIdDoesNotExist() {
-        trainerStorage.clear();
         Trainer trainer = new Trainer(1L, "Idris", "Powerful", "Idris.Powerful", "", true, "math");
 
         trainerRepository.create(trainer);
@@ -43,7 +48,6 @@ class HashMapTrainerRepositoryTest {
     @Test
     @DisplayName("create should throw exception if entity with such id exists")
     void testCreate_shouldThrowException_ifTrainerEntityWithSuchIdExists() {
-        trainerStorage.clear();
         Trainer trainer = new Trainer(1L, "Idris", "Powerful", "Idris.Powerful", "", true, "math");
         trainerStorage.saveNew(trainer);
 
@@ -57,7 +61,6 @@ class HashMapTrainerRepositoryTest {
     @Test
     @DisplayName("update should update trainer entity data if entity with such id exists")
     void testUpdate_shouldUpdateTrainerEntityData_ifTrainerEntityWithSuchIdExists() {
-        trainerStorage.clear();
         Trainer trainer = new Trainer(1L, "Idris", "Powerful", "Idris.Powerful", "", true, "math");
         trainerStorage.saveNew(trainer);
         Trainer updatedTrainer = new Trainer(1L, "Ken", "Artful", "Ken.Artful", "", true, "art");
@@ -73,7 +76,6 @@ class HashMapTrainerRepositoryTest {
     @Test
     @DisplayName("update should add new trainer entity if entity with such id does not exist")
     void testUpdate_shouldAddNewTrainerEntity_ifTrainerEntityWithSuchIdDoesNotExist() {
-        trainerStorage.clear();
         Trainer trainer = new Trainer(1L, "Idris", "Powerful", "Idris.Powerful", "", true, "math");
         trainerStorage.saveNew(trainer);
         Trainer updatedTrainer = new Trainer(2L, "Ken", "Artful", "Ken.Artful", "", true, "art");
@@ -92,7 +94,6 @@ class HashMapTrainerRepositoryTest {
     @Test
     @DisplayName("deleteById should delete trainer entity if entity with such id exists")
     void testDeleteById_shouldDeleteTrainerEntity_ifTrainerEntityWithSuchIdExists() {
-        trainerStorage.clear();
         Trainer trainer = new Trainer(1L, "Idris", "Powerful", "Idris.Powerful", "", true, "math");
         trainerStorage.saveNew(trainer);
 
@@ -104,7 +105,6 @@ class HashMapTrainerRepositoryTest {
     @Test
     @DisplayName("deleteById should throw exception if entity with such id does not exist")
     void testDeleteById_shouldThrowException_ifTrainerEntityWithSuchIdDoesNotExist() {
-        trainerStorage.clear();
         Trainer trainer = new Trainer(1L, "Idris", "Powerful", "Idris.Powerful", "", true, "math");
         trainerStorage.saveNew(trainer);
         Trainer trainerToBeDeleted = new Trainer(2L, "Ken", "Artful", "Ken.Artful", "", true, "art");
@@ -120,7 +120,6 @@ class HashMapTrainerRepositoryTest {
     @Test
     @DisplayName("findById should return trainer entity wrapped in Optional if entity with such id exists")
     void testFindById_shouldReturnTrainerEntity_ifTrainerEntityWithSuchIdExists() {
-        trainerStorage.clear();
         Trainer trainer = new Trainer(1L, "Idris", "Powerful", "Idris.Powerful", "", true, "math");
         trainerStorage.saveNew(trainer);
 
@@ -133,7 +132,6 @@ class HashMapTrainerRepositoryTest {
     @Test
     @DisplayName("findById should return empty Optional if entity with such id does not exist")
     void testFindById_shouldReturnEmptyOptional_ifTrainerEntityWithSuchIdDoesNotExist() {
-        trainerStorage.clear();
         Trainer trainer = new Trainer(1L, "Idris", "Powerful", "Idris.Powerful", "", true, "math");
         trainerStorage.saveNew(trainer);
         Trainer trainerToLookup = new Trainer(2L, "Ken", "Artful", "Ken.Artful", "", true, "art");
@@ -146,7 +144,6 @@ class HashMapTrainerRepositoryTest {
     @Test
     @DisplayName("findAll should return all trainer entities storage contains")
     void testFindAll_shouldReturnAllTrainerEntitiesStorageContains() {
-        trainerStorage.clear();
         Trainer trainer1 = new Trainer(1L, "Idris", "Powerful", "Idris.Powerful", "", true, "math");
         trainerStorage.saveNew(trainer1);
         Trainer trainer2 = new Trainer(2L, "Ken", "Artful", "Ken.Artful", "", true, "art");
@@ -166,15 +163,12 @@ class HashMapTrainerRepositoryTest {
     @Test
     @DisplayName("getMaxUsernameSerial should return empty optional if given user name does not exist in storage")
     void testGetMaxUsernameSerial_shouldReturnEmptyOptional_ifGivenUserNameDoesNotExistInStorage() {
-        trainerStorage.clear();
-
         assertTrue(trainerRepository.getMaxUsernameSerial("Idris", "Powerful").isEmpty());
     }
 
     @Test
     @DisplayName("getMaxUsernameSerial should return empty string if given user name present in storage once")
     void testGetMaxUsernameSerial_shouldReturnEmptyString_ifGivenUserNamePresentInStorageOnce() {
-        trainerStorage.clear();
         Trainer trainer = new Trainer(1L, "Idris", "Powerful", "Idris.Powerful", "", true, "math");
         trainerStorage.saveNew(trainer);
 
@@ -186,7 +180,6 @@ class HashMapTrainerRepositoryTest {
     @Test
     @DisplayName("getMaxUsernameSerial should return 1 if given user name present in storage twice")
     void testGetMaxUsernameSerial_shouldReturn1_ifGivenUserNamePresentInStorageTwice() {
-        trainerStorage.clear();
         Trainer trainer1 = new Trainer(1L, "Idris", "Powerful", "Idris.Powerful", "", true, "math");
         trainerStorage.saveNew(trainer1);
         Trainer trainer2 = new Trainer(2L, "Idris", "Powerful", "Idris.Powerful1", "", true, "math");
@@ -200,7 +193,6 @@ class HashMapTrainerRepositoryTest {
     @Test
     @DisplayName("getMaxUsernameSerial should return 2 if given user name present in storage thrice")
     void testGetMaxUsernameSerial_shouldReturn2_ifGivenUserNamePresentInStorageThrice() {
-        trainerStorage.clear();
         Trainer trainer1 = new Trainer(1L, "Idris", "Powerful", "Idris.Powerful", "", true, "math");
         trainerStorage.saveNew(trainer1);
         Trainer trainer2 = new Trainer(2L, "Idris", "Powerful", "Idris.Powerful1", "", true, "math");

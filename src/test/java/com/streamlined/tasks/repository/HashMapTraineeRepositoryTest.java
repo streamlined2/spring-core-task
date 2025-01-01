@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,10 +28,14 @@ class HashMapTraineeRepositoryTest {
     @InjectMocks
     private HashMapTraineeRepository traineeRepository;
 
+    @BeforeEach
+    void setup() {
+        traineeStorage.deleteAll();
+    }
+
     @Test
     @DisplayName("create should create new trainee entity if entity with such id does not exist")
     void testCreate_shouldCreateNewTrainee_ifTraineeEntityWithSuchIdDoesNotExist() {
-        traineeStorage.clear();
         Trainee trainee = new Trainee(5L, "Kyle", "Stark", "Kyle.Stark", "", true, LocalDate.of(1988, 5, 18), "USA");
 
         traineeRepository.create(trainee);
@@ -44,7 +49,6 @@ class HashMapTraineeRepositoryTest {
     @Test
     @DisplayName("create should throw exception if entity with such id exists")
     void testCreate_shouldThrowException_ifTraineeEntityWithSuchIdExists() {
-        traineeStorage.clear();
         Trainee trainee = new Trainee(5L, "Kyle", "Stark", "Kyle.Stark", "", true, LocalDate.of(1988, 5, 18), "USA");
         traineeStorage.saveNew(trainee);
 
@@ -58,7 +62,6 @@ class HashMapTraineeRepositoryTest {
     @Test
     @DisplayName("update should update trainee entity data if entity with such id exists")
     void testUpdate_shouldUpdateTraineeEntityData_ifTraineeEntityWithSuchIdExists() {
-        traineeStorage.clear();
         Trainee trainee = new Trainee(5L, "Kyle", "Stark", "Kyle.Stark", "", true, LocalDate.of(1988, 5, 18), "USA");
         traineeStorage.saveNew(trainee);
         Trainee updatedTrainee = new Trainee(5L, "Fred", "Smith", "Fred.Smith", "", true, LocalDate.of(1998, 6, 28),
@@ -75,7 +78,6 @@ class HashMapTraineeRepositoryTest {
     @Test
     @DisplayName("update should add new trainee entity if entity with such id does not exist")
     void testUpdate_shouldAddNewTraineeEntity_ifTraineeEntityWithSuchIdDoesNotExist() {
-        traineeStorage.clear();
         Trainee trainee = new Trainee(5L, "Kyle", "Stark", "Kyle.Stark", "", true, LocalDate.of(1988, 5, 18), "USA");
         traineeStorage.saveNew(trainee);
         Trainee updatedTrainee = new Trainee(6L, "Fred", "Smith", "Fred.Smith", "", true, LocalDate.of(1998, 6, 28),
@@ -95,7 +97,6 @@ class HashMapTraineeRepositoryTest {
     @Test
     @DisplayName("deleteById should delete trainee entity if entity with such id exists")
     void testDeleteById_shouldDeleteTraineeEntity_ifTraineeEntityWithSuchIdExists() {
-        traineeStorage.clear();
         Trainee trainee = new Trainee(5L, "Kyle", "Stark", "Kyle.Stark", "", true, LocalDate.of(1988, 5, 18), "USA");
         traineeStorage.saveNew(trainee);
 
@@ -107,7 +108,6 @@ class HashMapTraineeRepositoryTest {
     @Test
     @DisplayName("deleteById should throw exception if entity with such id does not exist")
     void testDeleteById_shouldThrowException_ifTraineeEntityWithSuchIdDoesNotExist() {
-        traineeStorage.clear();
         Trainee trainee = new Trainee(5L, "Kyle", "Stark", "Kyle.Stark", "", true, LocalDate.of(1988, 5, 18), "USA");
         traineeStorage.saveNew(trainee);
         Trainee traineeToBeDeleted = new Trainee(6L, "Fred", "Smith", "Fred.Smith", "", true, LocalDate.of(1998, 6, 28),
@@ -124,7 +124,6 @@ class HashMapTraineeRepositoryTest {
     @Test
     @DisplayName("findById should return trainee entity wrapped in Optional if entity with such id exists")
     void testFindById_shouldReturnTraineeEntity_ifTraineeEntityWithSuchIdExists() {
-        traineeStorage.clear();
         Trainee trainee = new Trainee(5L, "Kyle", "Stark", "Kyle.Stark", "", true, LocalDate.of(1988, 5, 18), "USA");
         traineeStorage.saveNew(trainee);
 
@@ -137,7 +136,6 @@ class HashMapTraineeRepositoryTest {
     @Test
     @DisplayName("findById should return empty Optional if entity with such id does not exist")
     void testFindById_shouldReturnEmptyOptional_ifTraineeEntityWithSuchIdDoesNotExist() {
-        traineeStorage.clear();
         Trainee trainee = new Trainee(5L, "Kyle", "Stark", "Kyle.Stark", "", true, LocalDate.of(1988, 5, 18), "USA");
         traineeStorage.saveNew(trainee);
         Trainee traineeToLookup = new Trainee(6L, "Fred", "Smith", "Fred.Smith", "", true, LocalDate.of(1998, 6, 28),
@@ -151,7 +149,6 @@ class HashMapTraineeRepositoryTest {
     @Test
     @DisplayName("findAll should return all trainee entities storage contains")
     void testFindAll_shouldReturnAllTraineeEntitiesStorageContains() {
-        traineeStorage.clear();
         Trainee trainee1 = new Trainee(5L, "Kyle", "Stark", "Kyle.Stark", "", true, LocalDate.of(1988, 5, 18), "USA");
         traineeStorage.saveNew(trainee1);
         Trainee trainee2 = new Trainee(6L, "Fred", "Smith", "Fred.Smith", "", true, LocalDate.of(1998, 6, 28), "UK");
@@ -171,15 +168,12 @@ class HashMapTraineeRepositoryTest {
     @Test
     @DisplayName("getMaxUsernameSerial should return empty optional if given user name does not exist in storage")
     void testGetMaxUsernameSerial_shouldReturnEmptyOptional_ifGivenUserNameDoesNotExistInStorage() {
-        traineeStorage.clear();
-
         assertTrue(traineeRepository.getMaxUsernameSerial("Kyle", "Stark").isEmpty());
     }
 
     @Test
     @DisplayName("getMaxUsernameSerial should return empty string if given user name present in storage once")
     void testGetMaxUsernameSerial_shouldReturnEmptyString_ifGivenUserNamePresentInStorageOnce() {
-        traineeStorage.clear();
         Trainee trainee = new Trainee(5L, "Kyle", "Stark", "Kyle.Stark", "", true, LocalDate.of(1988, 5, 18), "USA");
         traineeStorage.saveNew(trainee);
 
@@ -191,7 +185,6 @@ class HashMapTraineeRepositoryTest {
     @Test
     @DisplayName("getMaxUsernameSerial should return 1 if given user name present in storage twice")
     void testGetMaxUsernameSerial_shouldReturn1_ifGivenUserNamePresentInStorageTwice() {
-        traineeStorage.clear();
         Trainee trainee1 = new Trainee(5L, "Kyle", "Stark", "Kyle.Stark", "", true, LocalDate.of(1988, 5, 18), "USA");
         traineeStorage.saveNew(trainee1);
         Trainee trainee2 = new Trainee(6L, "Kyle", "Stark", "Kyle.Stark1", "", true, LocalDate.of(1988, 5, 18), "USA");
@@ -205,7 +198,6 @@ class HashMapTraineeRepositoryTest {
     @Test
     @DisplayName("getMaxUsernameSerial should return 2 if given user name present in storage thrice")
     void testGetMaxUsernameSerial_shouldReturn2_ifGivenUserNamePresentInStorageThrice() {
-        traineeStorage.clear();
         Trainee trainee1 = new Trainee(5L, "Kyle", "Stark", "Kyle.Stark", "", true, LocalDate.of(1988, 5, 18), "USA");
         traineeStorage.saveNew(trainee1);
         Trainee trainee2 = new Trainee(6L, "Kyle", "Stark", "Kyle.Stark1", "", true, LocalDate.of(1988, 5, 18), "USA");
