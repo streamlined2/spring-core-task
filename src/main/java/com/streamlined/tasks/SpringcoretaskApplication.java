@@ -1,35 +1,18 @@
 package com.streamlined.tasks;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.util.Objects;
-import java.util.Random;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder.BCryptVersion;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
-import com.fasterxml.jackson.dataformat.csv.CsvMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.streamlined.tasks.dto.TraineeDto;
 import com.streamlined.tasks.dto.TrainerDto;
-import com.streamlined.tasks.entity.Trainee;
-import com.streamlined.tasks.entity.Trainer;
-import com.streamlined.tasks.entity.Training;
-import com.streamlined.tasks.exception.MissingAlgorithmException;
 import com.streamlined.tasks.service.TraineeService;
 import com.streamlined.tasks.service.TrainerService;
 import com.streamlined.tasks.service.TrainingService;
-import com.streamlined.tasks.storage.HashMapStorage;
 
 @Configuration
 @ComponentScan("com.streamlined.tasks")
@@ -37,8 +20,6 @@ import com.streamlined.tasks.storage.HashMapStorage;
 public class SpringcoretaskApplication {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SpringcoretaskApplication.class);
-
-    private @Value("${algorithm.random}") String algorithmName;
 
     public static void main(String[] args) {
         new SpringcoretaskApplication().run();
@@ -73,44 +54,6 @@ public class SpringcoretaskApplication {
         } catch (Exception e) {
             LOGGER.error("Error while executing application: {}", e.getMessage(), e);
         }
-    }
-
-    @Bean
-    PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(BCryptVersion.$2Y);
-    }
-
-    @Bean
-    CsvMapper csvMapper() {
-        CsvMapper csvMapper = new CsvMapper();
-        csvMapper.registerModule(new JavaTimeModule());
-        return csvMapper;
-    }
-
-    @Bean
-    Random random() {
-        try {
-            return SecureRandom.getInstance(algorithmName);
-        } catch (NoSuchAlgorithmException e) {
-            LOGGER.error("Missing random generator algorithm {}", algorithmName, e);
-            throw new MissingAlgorithmException("Missing random generator algorithm", e);
-        }
-    }
-
-    @Bean("traineeStorage")
-    HashMapStorage<Long, Trainee> traineeStorage(@Value("${source.csv.trainee}") String sourceFileName) {
-        return new HashMapStorage<>();
-    }
-
-    @Bean("trainerStorage")
-    HashMapStorage<Long, Trainer> trainerStorage(@Value("${source.csv.trainer}") String sourceFileName) {
-        return new HashMapStorage<>();
-    }
-
-    @Bean("trainingStorage")
-    HashMapStorage<Training.TrainingKey, Training> trainingStorage(
-            @Value("${source.csv.training}") String sourceFileName) {
-        return new HashMapStorage<>();
     }
 
 }
