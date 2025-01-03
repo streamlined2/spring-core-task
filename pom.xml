@@ -115,6 +115,19 @@
 		    <version>${mockito.version}</version>
 		    <scope>test</scope>
 		</dependency>
+		<dependency>
+		    <groupId>org.jacoco</groupId>
+		    <artifactId>jacoco-maven-plugin</artifactId>
+		    <version>0.8.12</version>
+		</dependency>
 	</dependencies>
-
+	<reporting>
+		<plugins>
+			<plugin>
+			    <groupId>org.jacoco</groupId>
+			    <artifactId>jacoco-maven-plugin</artifactId>
+			    <version>0.8.12</version>
+			</plugin>
+		</plugins>
+	</reporting>
 </project>
