@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
@@ -15,21 +16,18 @@ import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.streamlined.tasks.entity.Entity;
 import com.streamlined.tasks.exception.ParseException;
 
-public class Parser<K, T extends Entity<K>> {
+@Component
+public class Parser {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Parser.class);
 
     private final CsvMapper csvMapper;
-    private final String sourceFileName;
-    private final Class<T> entityClass;
 
-    public Parser(Class<T> entityClass, CsvMapper csvMapper, String sourceFileName) {
-        this.entityClass = entityClass;
+    public Parser(CsvMapper csvMapper) {
         this.csvMapper = csvMapper;
-        this.sourceFileName = sourceFileName;
     }
 
-    public Map<K, T> parse() {
+    public <K, T extends Entity<K>> Map<K, T> parse(Class<T> entityClass,  String sourceFileName) {
         Map<K, T> entityMap = new HashMap<>();
         try (InputStream is = getClass().getResourceAsStream(sourceFileName);
                 BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {

@@ -5,7 +5,7 @@ import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.streamlined.tasks.dto.TrainerDto;
@@ -27,18 +27,20 @@ public class TrainerServiceImpl extends UserServiceImpl implements TrainerServic
 
     private final TrainerMapper trainerMapper;
     private final SecurityService securityService;
-    private final Parser<Long, Trainer> parser;
+    private final Parser parser;
+    private final String sourceFileName;
 
-    public TrainerServiceImpl(TrainerMapper trainerMapper, SecurityService securityService,
-            @Qualifier("trainerParser") Parser<Long, Trainer> parser) {
+    public TrainerServiceImpl(TrainerMapper trainerMapper, SecurityService securityService, Parser parser,
+            @Value("${source.csv.trainer}") String sourceFileName) {
         this.trainerMapper = trainerMapper;
         this.securityService = securityService;
         this.parser = parser;
+        this.sourceFileName = sourceFileName;
     }
 
     @PostConstruct
     private void initilialize() {
-        trainerRepository.addAll(parser.parse());
+        trainerRepository.addAll(parser.parse(Trainer.class, sourceFileName));
     }
 
     @Override

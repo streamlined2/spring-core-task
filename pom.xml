@@ -23,6 +23,7 @@
 		<jakarta.version>3.0.0</jakarta.version>
 		<junit.version>5.11.4</junit.version>
 		<mockito.version>5.14.2</mockito.version>
+		<jacoco.version>0.8.12</jacoco.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -118,7 +119,7 @@
 		<dependency>
 		    <groupId>org.jacoco</groupId>
 		    <artifactId>jacoco-maven-plugin</artifactId>
-		    <version>0.8.12</version>
+		    <version>${jacoco.version}</version>
 		</dependency>
 	</dependencies>
 	<reporting>
@@ -126,7 +127,7 @@
 			<plugin>
 			    <groupId>org.jacoco</groupId>
 			    <artifactId>jacoco-maven-plugin</artifactId>
-			    <version>0.8.12</version>
+			    <version>${jacoco.version}</version>
 			</plugin>
 		</plugins>
 	</reporting>

@@ -6,6 +6,7 @@ import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.streamlined.tasks.dto.TraineeDto;
@@ -27,18 +28,20 @@ public class TraineeServiceImpl extends UserServiceImpl implements TraineeServic
 
     private final TraineeMapper traineeMapper;
     private final SecurityService securityService;
-    private final Parser<Long, Trainee> parser;
+    private final Parser parser;
+    private final String sourceFileName;
 
-    public TraineeServiceImpl(TraineeMapper traineeMapper, SecurityService securityService,
-            @Qualifier("traineeParser") Parser<Long, Trainee> parser) {
+    public TraineeServiceImpl(TraineeMapper traineeMapper, SecurityService securityService, Parser parser,
+            @Value("${source.csv.trainee}") String sourceFileName) {
         this.traineeMapper = traineeMapper;
         this.securityService = securityService;
         this.parser = parser;
+        this.sourceFileName = sourceFileName;
     }
 
     @PostConstruct
     private void initilialize() {
-        traineeRepository.addAll(parser.parse());
+        traineeRepository.addAll(parser.parse(Trainee.class, sourceFileName));
     }
 
     @Override
