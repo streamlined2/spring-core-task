@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class TrainingType {
 
-    private String name;
+    private final String name;
 
     public TrainingType(String name) {
         this.name = name;
@@ -12,10 +12,6 @@ public class TrainingType {
 
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     @Override

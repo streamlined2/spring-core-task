@@ -29,8 +29,7 @@ public class Trainer extends User {
 
     @Override
     public String toString() {
-        return "Trainee{userId=%d, firstName=%s, lastName=%s, userName=%s, isActive=%b, specialization=%s}"
-                .formatted(getUserId(), getFirstName(), getLastName(), getUserName(), isActive(), specialization);
+        return "Trainer{userId=%d}".formatted(getUserId());
     }
 
 }

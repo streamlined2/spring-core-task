@@ -35,8 +35,7 @@ public class Trainee extends User {
 
     @Override
     public String toString() {
-        return "Trainee{userId=%d, firstName=%s, lastName=%s, userName=%s, isActive=%b, dateOfBirth=%tF, address=%s}"
-                .formatted(getUserId(), getFirstName(), getLastName(), getUserName(), isActive(), dateOfBirth, address);
+        return "Trainee{userId=%d}".formatted(getUserId());
     }
 
 }
