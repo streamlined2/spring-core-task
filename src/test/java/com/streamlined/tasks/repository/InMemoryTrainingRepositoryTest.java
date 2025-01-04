@@ -20,16 +20,16 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.streamlined.tasks.entity.Training;
 import com.streamlined.tasks.entity.TrainingType;
 import com.streamlined.tasks.exception.EntityAlreadyExistsException;
-import com.streamlined.tasks.storage.HashMapStorage;
+import com.streamlined.tasks.storage.InMemoryStorage;
 
 @ExtendWith(MockitoExtension.class)
-class HashMapTrainingRepositoryTest {
+class InMemoryTrainingRepositoryTest {
 
     @Spy
-    private HashMapStorage<Training.TrainingKey, Training> trainingStorage;
+    private InMemoryStorage<Training.TrainingKey, Training> trainingStorage;
 
     @InjectMocks
-    private HashMapTrainingRepository trainingRepository;
+    private InMemoryTrainingRepository trainingRepository;
 
     private static TrainingType mathType;
     private static TrainingType artType;

@@ -17,7 +17,7 @@ import com.streamlined.tasks.dto.TraineeDto;
 import com.streamlined.tasks.entity.Trainee;
 import com.streamlined.tasks.mapper.TraineeMapper;
 import com.streamlined.tasks.service.TraineeService;
-import com.streamlined.tasks.storage.HashMapStorage;
+import com.streamlined.tasks.storage.InMemoryStorage;
 
 @ExtendWith(SpringExtension.class)
 @TestPropertySource(locations = "classpath:application-integration-test.properties")
@@ -29,7 +29,7 @@ class SpringcoretaskApplicationIT {
     @Autowired
     private TraineeMapper traineeMapper;
     @Autowired
-    private HashMapStorage<Long, Trainee> traineeStorage;
+    private InMemoryStorage<Long, Trainee> traineeStorage;
 
     @Test
     void findAllShouldReturnListOfAllTrainees_ifSucceeds() {

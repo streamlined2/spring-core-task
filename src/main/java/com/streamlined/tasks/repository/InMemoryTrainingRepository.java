@@ -10,15 +10,15 @@ import org.springframework.stereotype.Repository;
 import com.streamlined.tasks.entity.Training;
 import com.streamlined.tasks.entity.Training.TrainingKey;
 import com.streamlined.tasks.exception.EntityAlreadyExistsException;
-import com.streamlined.tasks.storage.HashMapStorage;
+import com.streamlined.tasks.storage.InMemoryStorage;
 
 @Repository
-public class HashMapTrainingRepository implements TrainingRepository {
+public class InMemoryTrainingRepository implements TrainingRepository {
 
-    private final HashMapStorage<Training.TrainingKey, Training> trainingStorage;
+    private final InMemoryStorage<Training.TrainingKey, Training> trainingStorage;
 
-    public HashMapTrainingRepository(
-            @Qualifier("trainingStorage") HashMapStorage<Training.TrainingKey, Training> trainingStorage) {
+    public InMemoryTrainingRepository(
+            @Qualifier("trainingStorage") InMemoryStorage<Training.TrainingKey, Training> trainingStorage) {
         this.trainingStorage = trainingStorage;
     }
 

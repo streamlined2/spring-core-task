@@ -11,14 +11,14 @@ import org.springframework.stereotype.Repository;
 import com.streamlined.tasks.entity.Trainer;
 import com.streamlined.tasks.exception.EntityAlreadyExistsException;
 import com.streamlined.tasks.exception.NoSuchEntityException;
-import com.streamlined.tasks.storage.HashMapStorage;
+import com.streamlined.tasks.storage.InMemoryStorage;
 
 @Repository
-public class HashMapTrainerRepository implements TrainerRepository {
+public class InMemoryTrainerRepository implements TrainerRepository {
 
-    private final HashMapStorage<Long, Trainer> trainerStorage;
+    private final InMemoryStorage<Long, Trainer> trainerStorage;
 
-    public HashMapTrainerRepository(@Qualifier("trainerStorage") HashMapStorage<Long, Trainer> trainerStorage) {
+    public InMemoryTrainerRepository(@Qualifier("trainerStorage") InMemoryStorage<Long, Trainer> trainerStorage) {
         this.trainerStorage = trainerStorage;
     }
 

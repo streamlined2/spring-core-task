@@ -6,11 +6,11 @@ import java.util.stream.Stream;
 
 import com.streamlined.tasks.entity.Entity;
 
-public class HashMapStorage<K, T extends Entity<K>> {
+public class InMemoryStorage<K, T extends Entity<K>> {
 
     private final Map<K, T> entityMap;
 
-    public HashMapStorage() {
+    public InMemoryStorage() {
         entityMap = new HashMap<>();
     }
 

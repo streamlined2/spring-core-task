@@ -9,7 +9,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.streamlined.tasks.entity.Trainee;
 import com.streamlined.tasks.entity.Trainer;
 import com.streamlined.tasks.entity.Training;
-import com.streamlined.tasks.storage.HashMapStorage;
+import com.streamlined.tasks.storage.InMemoryStorage;
 
 @Configuration
 public class StorageConfiguration {
@@ -22,19 +22,19 @@ public class StorageConfiguration {
     }
 
     @Bean("traineeStorage")
-    HashMapStorage<Long, Trainee> traineeStorage(@Value("${source.csv.trainee}") String sourceFileName) {
-        return new HashMapStorage<>();
+    InMemoryStorage<Long, Trainee> traineeStorage(@Value("${source.csv.trainee}") String sourceFileName) {
+        return new InMemoryStorage<>();
     }
 
     @Bean("trainerStorage")
-    HashMapStorage<Long, Trainer> trainerStorage(@Value("${source.csv.trainer}") String sourceFileName) {
-        return new HashMapStorage<>();
+    InMemoryStorage<Long, Trainer> trainerStorage(@Value("${source.csv.trainer}") String sourceFileName) {
+        return new InMemoryStorage<>();
     }
 
     @Bean("trainingStorage")
-    HashMapStorage<Training.TrainingKey, Training> trainingStorage(
+    InMemoryStorage<Training.TrainingKey, Training> trainingStorage(
             @Value("${source.csv.training}") String sourceFileName) {
-        return new HashMapStorage<>();
+        return new InMemoryStorage<>();
     }
 
 }
