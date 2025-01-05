@@ -26,6 +26,7 @@
         <junit.version>5.11.4</junit.version>
         <mockito.version>5.14.2</mockito.version>
         <jacoco.version>0.8.12</jacoco.version>
+        <maven.failsafe.version>3.5.2</maven.failsafe.version>
     </properties>
     
     <dependencies>
@@ -120,19 +121,79 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-failsafe-plugin</artifactId>
+            <version>${maven.failsafe.version}</version>          
+        </dependency>
+        <dependency>
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
             <version>${jacoco.version}</version>
         </dependency>
     </dependencies>
     
-    <reporting>
+    <build>
         <plugins>
             <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>${jacoco.version}</version>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>${maven.failsafe.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>          
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>          
+                <artifactId>jacoco-maven-plugin</artifactId>          
+                <version>${jacoco.version}</version>          
+                <executions>             
+                    <execution>                
+                        <goals>                   
+                            <goal>prepare-agent</goal>                
+                        </goals>             
+                    </execution>             
+                    <execution>                
+                        <id>report</id>                
+                        <phase>prepare-package</phase>                
+                        <goals>                   
+                            <goal>report</goal>                
+                        </goals>             
+                    </execution>             
+                        <execution>                
+                            <id>default-check</id>                
+                            <goals>                   
+                                <goal>check</goal>                
+                            </goals>                
+                            <configuration>
+                                <excludes>
+                                    <exclude>com/streamlined/tasks/dto/*</exclude>
+                                    <exclude>com/streamlined/tasks/entity/*</exclude>
+                                    <exclude>com/streamlined/tasks/exception/*</exclude>
+                                    <exclude>com/streamlined/tasks/*Configuration.*</exclude>
+                                    <exclude>com/streamlined/tasks/SpringcoretaskApplication.*</exclude>
+                                </excludes>                   
+                                <rules>                      
+                                    <rule>                         
+                                        <element>CLASS</element>                         
+                                        <limits>                            
+                                            <limit>                               
+                                                <counter>BRANCH</counter>                               
+                                                <value>COVEREDRATIO</value>                               
+                                                <minimum>0.95</minimum>                            
+                                            </limit>                        
+                                        </limits>                      
+                                    </rule>                   
+                                </rules>                
+                            </configuration>             
+                    </execution>          
+                </executions>
             </plugin>
         </plugins>
-    </reporting>
+    </build>
+
 </project>

@@ -3,6 +3,7 @@ package com.streamlined.tasks.repository;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -203,6 +204,25 @@ class InMemoryTrainerRepositoryTest {
         Optional<String> serialNumber = trainerRepository.getMaxUsernameSerial("Idris", "Powerful");
         assertTrue(serialNumber.isPresent());
         assertEquals(2, Long.valueOf(serialNumber.get()));
+    }
+
+    @Test
+    @DisplayName("addAll should add all trainer entities to storage")
+    void testAddAll_shouldAddAllTrainerEntitiesToStorage() {
+        Trainer trainer1 = new Trainer(1L, "Idris", "Powerful", "Idris.Powerful", "", true, "math");
+        Trainer trainer2 = new Trainer(2L, "Ken", "Artful", "Ken.Artful", "", true, "art");
+        Map<Long, Trainer> trainerList = Map.ofEntries(Map.entry(trainer1.getPrimaryKey(), trainer1),
+                Map.entry(trainer2.getPrimaryKey(), trainer2));
+
+        trainerRepository.addAll(trainerList);
+
+        assertEquals(2, trainerStorage.size());
+        Trainer foundTrainer = trainerStorage.get(trainer1.getPrimaryKey());
+        assertNotNull(foundTrainer);
+        assertSame(trainer1, foundTrainer);
+        foundTrainer = trainerStorage.get(trainer2.getPrimaryKey());
+        assertNotNull(foundTrainer);
+        assertSame(trainer2, foundTrainer);
     }
 
 }

@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -121,6 +122,27 @@ class InMemoryTrainingRepositoryTest {
         foundTraining = trainingStorage.get(training2.getPrimaryKey());
         assertNotNull(foundTraining);
         assertEquals(training2.toString(), foundTraining.toString());
+    }
+
+    @Test
+    @DisplayName("addAll should add all training entities to storage")
+    void testAddAll_shouldAddAllTrainingEntitiesToStorage() {
+        Training training1 = new Training(1L, 1L, "Math training", mathType, LocalDate.of(2020, 1, 1),
+                Duration.ofDays(20));
+        Training training2 = new Training(2L, 1L, "Math training", mathType, LocalDate.of(2021, 1, 1),
+                Duration.ofDays(20));
+        Map<Training.TrainingKey, Training> trainingList = Map.ofEntries(
+                Map.entry(training1.getPrimaryKey(), training1), Map.entry(training2.getPrimaryKey(), training2));
+
+        trainingRepository.addAll(trainingList);
+
+        assertEquals(2, trainingStorage.size());
+        Training foundTraining = trainingStorage.get(training1.getPrimaryKey());
+        assertNotNull(foundTraining);
+        assertSame(training1, foundTraining);
+        foundTraining = trainingStorage.get(training2.getPrimaryKey());
+        assertNotNull(foundTraining);
+        assertSame(training2, foundTraining);
     }
 
 }

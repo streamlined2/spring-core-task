@@ -1,4 +1,4 @@
-package com.streamlined.tasks;
+package com.streamlined.tasks.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -13,16 +13,16 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.streamlined.tasks.SpringcoretaskApplication;
 import com.streamlined.tasks.dto.TraineeDto;
 import com.streamlined.tasks.entity.Trainee;
 import com.streamlined.tasks.mapper.TraineeMapper;
-import com.streamlined.tasks.service.TraineeService;
 import com.streamlined.tasks.storage.InMemoryStorage;
 
 @ExtendWith(SpringExtension.class)
 @TestPropertySource(locations = "classpath:application-integration-test.properties")
 @ContextConfiguration(classes = SpringcoretaskApplication.class)
-class SpringcoretaskApplicationIT {
+class TraineeServiceImplIT {
 
     @Autowired
     private TraineeService traineeService;

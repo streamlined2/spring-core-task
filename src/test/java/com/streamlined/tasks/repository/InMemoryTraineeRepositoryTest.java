@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -208,6 +209,25 @@ class InMemoryTraineeRepositoryTest {
         Optional<String> serialNumber = traineeRepository.getMaxUsernameSerial("Kyle", "Stark");
         assertTrue(serialNumber.isPresent());
         assertEquals(2, Long.valueOf(serialNumber.get()));
+    }
+
+    @Test
+    @DisplayName("addAll should add all trainee entities to storage")
+    void testAddAll_shouldAddAllTraineeEntitiesToStorage() {
+        Trainee trainee1 = new Trainee(1L, "Kyle", "Stark", "Kyle.Stark", "", true, LocalDate.of(1988, 5, 18), "USA");
+        Trainee trainee2 = new Trainee(2L, "Fred", "Smith", "Fred.Smith", "", true, LocalDate.of(1998, 6, 28), "UK");
+        Map<Long, Trainee> traineeList = Map.ofEntries(Map.entry(trainee1.getPrimaryKey(), trainee1),
+                Map.entry(trainee2.getPrimaryKey(), trainee2));
+
+        traineeRepository.addAll(traineeList);
+
+        assertEquals(2, traineeStorage.size());
+        Trainee foundTrainee = traineeStorage.get(trainee1.getPrimaryKey());
+        assertNotNull(foundTrainee);
+        assertSame(trainee1, foundTrainee);
+        foundTrainee = traineeStorage.get(trainee2.getPrimaryKey());
+        assertNotNull(foundTrainee);
+        assertSame(trainee2, foundTrainee);
     }
 
 }
