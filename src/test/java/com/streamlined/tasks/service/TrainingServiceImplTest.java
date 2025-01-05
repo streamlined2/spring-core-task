@@ -86,13 +86,13 @@ class TrainingServiceImplTest {
 
         trainingService.create(trainingDto);
 
+        verify(trainingRepository).create(training);
         assertEquals(initialTrainingListSize + 1, trainingList.size());
         assertTrue(trainingList.contains(training));
         Optional<Training> newTraining = trainingList.stream().filter(t -> t.getPrimaryKey().equals(trainingKey))
                 .findFirst();
         assertTrue(newTraining.isPresent());
-        assertEquals(trainingDto, trainingMapper.toDto(newTraining.get()));
-        verify(trainingRepository).create(training);
+        assertTrue(training.isIdenticalTo(newTraining.get()));
     }
 
     @Test
@@ -106,9 +106,9 @@ class TrainingServiceImplTest {
         doAnswer(new ThrowsException(new RuntimeException(errorMessage))).when(trainingRepository).create(training);
 
         Exception e = assertThrows(EntityCreationException.class, () -> trainingService.create(trainingDto));
+        verify(trainingRepository).create(training);
         assertEquals("Error creating training entity", e.getMessage());
         assertEquals(errorMessage, e.getCause().getMessage());
-        verify(trainingRepository).create(training);
     }
 
     @Test
@@ -123,7 +123,7 @@ class TrainingServiceImplTest {
 
         verify(trainingRepository).findById(expectedTraining.getPrimaryKey());
         assertTrue(actualTrainingDto.isPresent());
-        assertEquals(expectedTrainingDto, actualTrainingDto.get());
+        assertTrue(expectedTraining.isIdenticalTo(trainingMapper.toEntity(actualTrainingDto.get())));
     }
 
     @Test
@@ -167,11 +167,10 @@ class TrainingServiceImplTest {
 
         when(trainingRepository.findAll()).thenReturn(expectedTrainingList.stream());
 
-        List<TrainingDto> resultingDtoList = trainingService.findAll().toList();
-        List<TrainingDto> expectedDtoList = expectedTrainingList.stream().map(trainingMapper::toDto).toList();
+        List<Training> actualTrainingList = trainingService.findAll().map(trainingMapper::toEntity).toList();
 
-        assertEquals(expectedDtoList, resultingDtoList);
         verify(trainingRepository).findAll();
+        assertIterableEquals(expectedTrainingList, actualTrainingList);
     }
 
     @Test

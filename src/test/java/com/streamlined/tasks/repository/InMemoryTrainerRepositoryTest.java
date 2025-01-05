@@ -43,7 +43,7 @@ class InMemoryTrainerRepositoryTest {
         assertEquals(1, trainerStorage.size());
         Trainer savedTrainer = trainerStorage.get(trainer.getUserId());
         assertNotNull(savedTrainer);
-        assertEquals(trainer.toString(), savedTrainer.toString());
+        assertTrue(trainer.isIdenticalTo(savedTrainer));
     }
 
     @Test
@@ -56,7 +56,7 @@ class InMemoryTrainerRepositoryTest {
         assertEquals(1, trainerStorage.size());
         Trainer savedTrainer = trainerStorage.get(trainer.getUserId());
         assertNotNull(savedTrainer);
-        assertEquals(trainer.toString(), savedTrainer.toString());
+        assertTrue(trainer.isIdenticalTo(savedTrainer));
     }
 
     @Test
@@ -71,7 +71,7 @@ class InMemoryTrainerRepositoryTest {
         assertEquals(1, trainerStorage.size());
         Trainer savedTrainer = trainerStorage.get(trainer.getUserId());
         assertNotNull(savedTrainer);
-        assertEquals(updatedTrainer.toString(), savedTrainer.toString());
+        assertTrue(updatedTrainer.isIdenticalTo(savedTrainer));
     }
 
     @Test
@@ -86,10 +86,10 @@ class InMemoryTrainerRepositoryTest {
         assertEquals(2, trainerStorage.size());
         Trainer savedTrainer = trainerStorage.get(trainer.getUserId());
         assertNotNull(savedTrainer);
-        assertEquals(trainer.toString(), savedTrainer.toString());
+        assertTrue(trainer.isIdenticalTo(savedTrainer));
         savedTrainer = trainerStorage.get(updatedTrainer.getUserId());
         assertNotNull(savedTrainer);
-        assertEquals(updatedTrainer.toString(), savedTrainer.toString());
+        assertTrue(updatedTrainer.isIdenticalTo(savedTrainer));
     }
 
     @Test
@@ -115,7 +115,7 @@ class InMemoryTrainerRepositoryTest {
         assertEquals(1, trainerStorage.size());
         Trainer savedTrainer = trainerStorage.get(trainer.getUserId());
         assertNotNull(savedTrainer);
-        assertEquals(trainer.toString(), savedTrainer.toString());
+        assertTrue(trainer.isIdenticalTo(savedTrainer));
     }
 
     @Test
@@ -127,7 +127,7 @@ class InMemoryTrainerRepositoryTest {
         Optional<Trainer> foundTrainer = trainerRepository.findById(trainer.getUserId());
 
         assertTrue(foundTrainer.isPresent());
-        assertSame(trainer, foundTrainer.get());
+        assertTrue(trainer.isIdenticalTo(foundTrainer.get()));
     }
 
     @Test
@@ -155,10 +155,10 @@ class InMemoryTrainerRepositoryTest {
         assertEquals(2, foundTrainers.size());
         Trainer foundTrainer = trainerStorage.get(trainer1.getUserId());
         assertNotNull(foundTrainer);
-        assertEquals(trainer1.toString(), foundTrainer.toString());
+        assertTrue(trainer1.isIdenticalTo(foundTrainer));
         foundTrainer = trainerStorage.get(trainer2.getUserId());
         assertNotNull(foundTrainer);
-        assertEquals(trainer2.toString(), foundTrainer.toString());
+        assertTrue(trainer2.isIdenticalTo(foundTrainer));
     }
 
     @Test
@@ -219,10 +219,10 @@ class InMemoryTrainerRepositoryTest {
         assertEquals(2, trainerStorage.size());
         Trainer foundTrainer = trainerStorage.get(trainer1.getPrimaryKey());
         assertNotNull(foundTrainer);
-        assertSame(trainer1, foundTrainer);
+        assertTrue(trainer1.isIdenticalTo(foundTrainer));
         foundTrainer = trainerStorage.get(trainer2.getPrimaryKey());
         assertNotNull(foundTrainer);
-        assertSame(trainer2, foundTrainer);
+        assertTrue(trainer2.isIdenticalTo(foundTrainer));
     }
 
 }

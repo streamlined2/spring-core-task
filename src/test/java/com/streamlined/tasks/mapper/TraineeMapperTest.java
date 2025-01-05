@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import com.streamlined.tasks.dto.TraineeDto;
@@ -12,12 +11,7 @@ import com.streamlined.tasks.entity.Trainee;
 
 class TraineeMapperTest {
 
-    private static TraineeMapper traineeMapper;
-
-    @BeforeAll
-    static void setup() {
-        traineeMapper = new TraineeMapper();
-    }
+    private TraineeMapper traineeMapper = new TraineeMapper();
 
     @Test
     void toEntityShouldReturnInstanceOfTraineeEntity_ifSucceeds() {

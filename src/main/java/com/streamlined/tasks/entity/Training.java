@@ -101,4 +101,16 @@ public class Training implements Entity<Training.TrainingKey> {
         return new TrainingKey(traineeId, trainerId, date);
     }
 
+    @Override
+    public boolean isIdenticalTo(Entity<TrainingKey> entity) {
+        if (entity instanceof Training training) {
+            return Objects.equals(getTraineeId(), training.getTraineeId())
+                    && Objects.equals(getTrainerId(), training.getTrainerId())
+                    && Objects.equals(getName(), training.getName()) && Objects.equals(getType(), training.getType())
+                    && Objects.equals(getDate(), training.getDate())
+                    && Objects.equals(getDuration(), training.getDuration());
+        }
+        return false;
+    }
+
 }

@@ -2,7 +2,6 @@ package com.streamlined.tasks.mapper;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import com.streamlined.tasks.dto.TrainerDto;
@@ -10,12 +9,7 @@ import com.streamlined.tasks.entity.Trainer;
 
 class TrainerMapperTest {
 
-    private static TrainerMapper trainerMapper;
-
-    @BeforeAll
-    static void setup() {
-        trainerMapper = new TrainerMapper();
-    }
+    private TrainerMapper trainerMapper = new TrainerMapper();
 
     @Test
     void toEntityShouldReturnInstanceOfTrainerEntity_ifSucceeds() {

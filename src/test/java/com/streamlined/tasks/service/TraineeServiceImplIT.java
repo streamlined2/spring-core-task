@@ -1,6 +1,6 @@
 package com.streamlined.tasks.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
@@ -34,18 +34,21 @@ class TraineeServiceImplIT {
     @Test
     void findAllShouldReturnListOfAllTrainees_ifSucceeds() {
 
-        List<TraineeDto> trainees = traineeService.findAll().toList();
+        List<Trainee> actualTraineeList = traineeService.findAll().map(traineeMapper::toEntity).toList();
 
-        assertEquals(traineeStorage.getAll().map(traineeMapper::toDto).toList(), trainees);
+        List<Trainee> expectedTraineeList = traineeStorage.getAll().toList();
+        assertIterableEquals(expectedTraineeList, actualTraineeList);
     }
 
     @Test
     void findByIdShouldReturnTraineeEntity_ifGivenIdPresent() {
         final Long traineeId = 1L;
-        Optional<TraineeDto> trainee = traineeService.findById(traineeId);
+        Optional<TraineeDto> actualTraineeDto = traineeService.findById(traineeId);
+        Optional<Trainee> actualTrainee = actualTraineeDto.map(traineeMapper::toEntity);
 
-        assertTrue(trainee.isPresent());
-        assertEquals(traineeMapper.toDto(traineeStorage.get(traineeId)), trainee.get());
+        assertTrue(actualTrainee.isPresent());
+        Trainee expectedTrainee = traineeStorage.get(traineeId);
+        assertTrue(expectedTrainee.isIdenticalTo(actualTrainee.get()));
     }
 
     @Test

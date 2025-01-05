@@ -1,5 +1,7 @@
 package com.streamlined.tasks.entity;
 
+import java.util.Objects;
+
 public class Trainer extends User {
 
     private String specialization;
@@ -30,6 +32,19 @@ public class Trainer extends User {
     @Override
     public String toString() {
         return "Trainer{userId=%d}".formatted(getUserId());
+    }
+
+    @Override
+    public boolean isIdenticalTo(Entity<Long> entity) {
+        if (entity instanceof Trainer trainer) {
+            return Objects.equals(getUserId(), trainer.getUserId())
+                    && Objects.equals(getFirstName(), trainer.getFirstName())
+                    && Objects.equals(getLastName(), trainer.getLastName())
+                    && Objects.equals(getUserName(), trainer.getUserName())
+                    && Objects.equals(isActive(), trainer.isActive())
+                    && Objects.equals(getSpecialization(), trainer.getSpecialization());
+        }
+        return false;
     }
 
 }

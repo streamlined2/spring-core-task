@@ -59,7 +59,7 @@ class InMemoryTrainingRepositoryTest {
         assertEquals(1, trainingStorage.size());
         Training savedTraining = trainingStorage.get(training.getPrimaryKey());
         assertNotNull(savedTraining);
-        assertEquals(training.toString(), savedTraining.toString());
+        assertTrue(training.isIdenticalTo(savedTraining));
     }
 
     @Test
@@ -73,7 +73,7 @@ class InMemoryTrainingRepositoryTest {
         assertEquals(1, trainingStorage.size());
         Training savedTraining = trainingStorage.get(training.getPrimaryKey());
         assertNotNull(savedTraining);
-        assertEquals(training.toString(), savedTraining.toString());
+        assertTrue(training.isIdenticalTo(savedTraining));
     }
 
     @Test
@@ -86,7 +86,7 @@ class InMemoryTrainingRepositoryTest {
         Optional<Training> foundTraining = trainingRepository.findById(training.getPrimaryKey());
 
         assumeTrue(foundTraining.isPresent());
-        assertSame(training, foundTraining.get());
+        assertTrue(training.isIdenticalTo(foundTraining.get()));
     }
 
     @Test
@@ -118,10 +118,10 @@ class InMemoryTrainingRepositoryTest {
         assertEquals(2, foundTrainings.size());
         Training foundTraining = trainingStorage.get(training1.getPrimaryKey());
         assertNotNull(foundTraining);
-        assertEquals(training1.toString(), foundTraining.toString());
+        assertTrue(training1.isIdenticalTo(foundTraining));
         foundTraining = trainingStorage.get(training2.getPrimaryKey());
         assertNotNull(foundTraining);
-        assertEquals(training2.toString(), foundTraining.toString());
+        assertTrue(training2.isIdenticalTo(foundTraining));
     }
 
     @Test
@@ -139,10 +139,10 @@ class InMemoryTrainingRepositoryTest {
         assertEquals(2, trainingStorage.size());
         Training foundTraining = trainingStorage.get(training1.getPrimaryKey());
         assertNotNull(foundTraining);
-        assertSame(training1, foundTraining);
+        assertTrue(training1.isIdenticalTo(foundTraining));
         foundTraining = trainingStorage.get(training2.getPrimaryKey());
         assertNotNull(foundTraining);
-        assertSame(training2, foundTraining);
+        assertTrue(training2.isIdenticalTo(foundTraining));
     }
 
 }

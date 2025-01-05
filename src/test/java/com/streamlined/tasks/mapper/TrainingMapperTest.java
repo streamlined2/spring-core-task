@@ -6,7 +6,6 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import com.streamlined.tasks.dto.TrainingDto;
@@ -15,12 +14,7 @@ import com.streamlined.tasks.entity.TrainingType;
 
 class TrainingMapperTest {
 
-    private static TrainingMapper trainingMapper;
-
-    @BeforeAll
-    static void setup() {
-        trainingMapper = new TrainingMapper();
-    }
+    private TrainingMapper trainingMapper = new TrainingMapper();
 
     @Test
     void toEntityShouldReturnInstanceOfTrainingEntity_ifSucceeds() {

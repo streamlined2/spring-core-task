@@ -50,13 +50,13 @@ class SecurityServiceImplTest {
         when(passwordEncoder.encode(any())).thenAnswer(new Answer<String>() {
             @Override
             public String answer(InvocationOnMock invocation) throws Throwable {
-                StringBuilder password = invocation.getArgument(0);
+                CharSequence password = invocation.getArgument(0);
                 return password.toString();
             }
         });
 
         String actualHash = securityService.getPasswordHash(password.toCharArray());
-        
+
         assertEquals(expectedHash, actualHash);
     }
 

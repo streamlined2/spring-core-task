@@ -81,13 +81,13 @@ class TraineeServiceImplTest {
 
         traineeService.create(traineeDto, password);
 
+        verify(traineeRepository).create(trainee);
         assertEquals(initialTraineeListSize + 1, traineeList.size());
         assertTrue(traineeList.contains(trainee));
         Optional<Trainee> newTrainee = traineeList.stream().filter(t -> t.getUserId().equals(trainee.getUserId()))
                 .findFirst();
         assertTrue(newTrainee.isPresent());
-        assertEquals(traineeDto, traineeMapper.toDto(newTrainee.get()));
-        verify(traineeRepository).create(trainee);
+        assertTrue(trainee.isIdenticalTo(newTrainee.get()));
     }
 
     @Test
@@ -101,9 +101,9 @@ class TraineeServiceImplTest {
         doAnswer(new ThrowsException(new RuntimeException(errorMessage))).when(traineeRepository).create(trainee);
 
         Exception e = assertThrows(EntityCreationException.class, () -> traineeService.create(traineeDto, password));
+        verify(traineeRepository).create(trainee);
         assertEquals("Error creating trainee entity", e.getMessage());
         assertEquals(errorMessage, e.getCause().getMessage());
-        verify(traineeRepository).create(trainee);
     }
 
     @Test
@@ -131,9 +131,9 @@ class TraineeServiceImplTest {
 
         traineeService.update(traineeDto);
 
-        assertEquals(traineeDto, traineeMapper.toDto(traineeList.get(traineeIndex)));
         verify(traineeRepository).findById(trainee.getUserId());
         verify(traineeRepository).update(trainee);
+        assertTrue(trainee.isIdenticalTo(traineeList.get(traineeIndex)));
     }
 
     @Test
@@ -147,10 +147,10 @@ class TraineeServiceImplTest {
         doAnswer(new ThrowsException(new RuntimeException(errorMessage))).when(traineeRepository).update(trainee);
 
         Exception e = assertThrows(EntityUpdateException.class, () -> traineeService.update(traineeDto));
-        assertEquals("Error updating trainee entity", e.getMessage());
-        assertEquals(errorMessage, e.getCause().getMessage());
         verify(traineeRepository).findById(trainee.getUserId());
         verify(traineeRepository).update(trainee);
+        assertEquals("Error updating trainee entity", e.getMessage());
+        assertEquals(errorMessage, e.getCause().getMessage());
     }
 
     @Test
@@ -163,10 +163,10 @@ class TraineeServiceImplTest {
         when(traineeRepository.findById(trainee.getUserId())).thenReturn(Optional.empty());
 
         Exception e = assertThrows(EntityUpdateException.class, () -> traineeService.update(traineeDto));
-        assertEquals("Error updating trainee entity", e.getMessage());
-        assertEquals(errorMessage, e.getCause().getMessage());
         verify(traineeRepository).findById(trainee.getUserId());
         verify(traineeRepository, never()).update(trainee);
+        assertEquals("Error updating trainee entity", e.getMessage());
+        assertEquals(errorMessage, e.getCause().getMessage());
     }
 
     @Test
@@ -194,9 +194,9 @@ class TraineeServiceImplTest {
 
         traineeService.updatePassword(trainee.getUserId(), password.toCharArray());
 
-        assertEquals(password, traineeList.get(traineeIndex).getPasswordHash());
         verify(traineeRepository).findById(trainee.getUserId());
         verify(traineeRepository).update(trainee);
+        assertEquals(password, traineeList.get(traineeIndex).getPasswordHash());
     }
 
     @Test
@@ -211,10 +211,10 @@ class TraineeServiceImplTest {
 
         Exception e = assertThrows(EntityUpdateException.class,
                 () -> traineeService.updatePassword(trainee.getUserId(), password));
-        assertEquals("Error updating password for trainee entity", e.getMessage());
-        assertEquals(errorMessage, e.getCause().getMessage());
         verify(traineeRepository).findById(trainee.getUserId());
         verify(traineeRepository).update(trainee);
+        assertEquals("Error updating password for trainee entity", e.getMessage());
+        assertEquals(errorMessage, e.getCause().getMessage());
     }
 
     @Test
@@ -228,10 +228,10 @@ class TraineeServiceImplTest {
 
         Exception e = assertThrows(EntityUpdateException.class,
                 () -> traineeService.updatePassword(trainee.getUserId(), password));
-        assertEquals("Error updating password for trainee entity", e.getMessage());
-        assertEquals(errorMessage, e.getCause().getMessage());
         verify(traineeRepository).findById(trainee.getUserId());
         verify(traineeRepository, never()).update(trainee);
+        assertEquals("Error updating password for trainee entity", e.getMessage());
+        assertEquals(errorMessage, e.getCause().getMessage());
     }
 
     @Test
@@ -256,9 +256,9 @@ class TraineeServiceImplTest {
 
         traineeService.deleteById(trainee.getUserId());
 
+        verify(traineeRepository).deleteById(trainee.getUserId());
         assertFalse(traineeList.contains(trainee));
         assertEquals(initialListSize - 1, traineeList.size());
-        verify(traineeRepository).deleteById(trainee.getUserId());
     }
 
     @Test
@@ -270,9 +270,9 @@ class TraineeServiceImplTest {
                 .when(traineeRepository).deleteById(nonExistentId);
 
         Exception e = assertThrows(EntityDeletionException.class, () -> traineeService.deleteById(nonExistentId));
+        verify(traineeRepository).deleteById(nonExistentId);
         assertEquals("Error deleting trainee entity", e.getMessage());
         assertEquals("No entity found with id %d".formatted(nonExistentId.intValue()), e.getCause().getMessage());
-        verify(traineeRepository).deleteById(nonExistentId);
     }
 
     @Test
@@ -284,9 +284,9 @@ class TraineeServiceImplTest {
                 .deleteById(nonExistentId);
 
         Exception e = assertThrows(EntityDeletionException.class, () -> traineeService.deleteById(nonExistentId));
+        verify(traineeRepository).deleteById(nonExistentId);
         assertEquals("Error deleting trainee entity", e.getMessage());
         assertEquals(errorMessage, e.getCause().getMessage());
-        verify(traineeRepository).deleteById(nonExistentId);
     }
 
     @Test
@@ -297,12 +297,12 @@ class TraineeServiceImplTest {
                 LocalDate.of(1991, 3, 10), "UK");
         when(traineeRepository.findById(traineeId)).thenReturn(Optional.of(expectedTrainee));
 
-        Optional<TraineeDto> actualTraineeDto = traineeService.findById(traineeId);
+        Optional<Trainee> actualTrainee = traineeService.findById(traineeId).map(traineeMapper::toEntity);
         TraineeDto expectedTraineeDto = traineeMapper.toDto(expectedTrainee);
 
         verify(traineeRepository).findById(traineeId);
-        assertTrue(actualTraineeDto.isPresent());
-        assertEquals(expectedTraineeDto, actualTraineeDto.get());
+        assertTrue(actualTrainee.isPresent());
+        assertTrue(expectedTrainee.isIdenticalTo(actualTrainee.get()));
     }
 
     @Test
@@ -339,11 +339,10 @@ class TraineeServiceImplTest {
 
         when(traineeRepository.findAll()).thenReturn(expectedTraineeList.stream());
 
-        List<TraineeDto> resultingDtoList = traineeService.findAll().toList();
-        List<TraineeDto> expectedDtoList = expectedTraineeList.stream().map(traineeMapper::toDto).toList();
+        List<Trainee> actualTraineeList = traineeService.findAll().map(traineeMapper::toEntity).toList();
 
-        assertEquals(expectedDtoList, resultingDtoList);
         verify(traineeRepository).findAll();
+        assertIterableEquals(expectedTraineeList, actualTraineeList);
     }
 
     @Test
