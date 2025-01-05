@@ -9,7 +9,7 @@ import com.streamlined.tasks.entity.Trainee;
 public class TraineeMapper {
 
     public Trainee toEntity(TraineeDto dto) {
-        return new Trainee(dto.userId(), dto.firstName(), dto.lastName(), dto.userName(), null, dto.isActive(),
+        return new Trainee(dto.userId(), dto.firstName(), dto.lastName(), dto.userName(), dto.isActive(),
                 dto.dateOfBirth(), dto.address());
     }
 
