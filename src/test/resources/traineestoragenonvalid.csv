@@ -1,0 +1,15 @@
+userId,firstName,lastName,userName,passwordHash,active,dateOfBirth,address
+-1,John,Smith,John.Smith,john,true,"1990-01-01",USA
+0,John,Smith,John.Smith,john,true,"1990-01-01",USA
+1,Jöhn,Smith,John.Smith,john,true,"1990-01-01",USA
+1,J@hn,Smith,John.Smith,john,true,"1990-01-01",USA
+1,john,Smith,John.Smith,john,true,"1990-01-01",USA
+1,John,S̈mith,John.Smith,john,true,"1990-01-01",USA
+1,John,$mith,John.Smith,john,true,"1990-01-01",USA
+1,John,smith,John.Smith,john,true,"1990-01-01",USA
+1,John,Smith,Jack.Smith,john,true,"1990-01-01",USA
+1,John,Smith,John.Smith-1,john,true,"1990-01-01",USA
+1,John,Smith,John.SmithABC,john,true,"1990-01-01",USA
+1,John,Smith,John.Smith,john,true,"2999-01-01",USA
+1,John,Smith,John.Smith,john,true,"1990-01-01",US@
+1,John,Smith,John.Smith,john,true,"1990-01-01",USÄ

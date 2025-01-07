@@ -1,0 +1,2 @@
+userId,firstName,lastName,userName,passwordHash,active,dateOfBirth,address
+A,John,Smith,John.Smith,john,true,"1990-01-01",USA
