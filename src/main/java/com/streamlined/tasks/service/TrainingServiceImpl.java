@@ -16,6 +16,7 @@ import com.streamlined.tasks.exception.EntityQueryException;
 import com.streamlined.tasks.mapper.TrainingMapper;
 import com.streamlined.tasks.parser.Parser;
 import com.streamlined.tasks.repository.TrainingRepository;
+import com.streamlined.tasks.validator.TrainingValidator;
 
 import jakarta.annotation.PostConstruct;
 
@@ -28,18 +29,20 @@ public class TrainingServiceImpl implements TrainingService {
     private final TrainingRepository trainingRepository;
     private final Parser parser;
     private final String sourceFileName;
+    private final TrainingValidator trainingValidator;
 
     public TrainingServiceImpl(TrainingMapper trainingMapper, TrainingRepository trainingRepository, Parser parser,
-            @Value("${source.csv.training}") String sourceFileName) {
+            @Value("${source.csv.training}") String sourceFileName, TrainingValidator trainingValidator) {
         this.trainingMapper = trainingMapper;
         this.trainingRepository = trainingRepository;
         this.parser = parser;
         this.sourceFileName = sourceFileName;
+        this.trainingValidator = trainingValidator;
     }
 
     @PostConstruct
     private void initilialize() {
-        trainingRepository.addAll(parser.parse(Training.class, sourceFileName));
+        trainingRepository.addAll(parser.parse(Training.class, sourceFileName, trainingValidator));
     }
 
     @Override

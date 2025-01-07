@@ -17,6 +17,7 @@ import com.streamlined.tasks.exception.EntityUpdateException;
 import com.streamlined.tasks.exception.NoSuchEntityException;
 import com.streamlined.tasks.mapper.TrainerMapper;
 import com.streamlined.tasks.parser.Parser;
+import com.streamlined.tasks.validator.TrainerValidator;
 
 import jakarta.annotation.PostConstruct;
 
@@ -29,18 +30,20 @@ public class TrainerServiceImpl extends UserServiceImpl implements TrainerServic
     private final SecurityService securityService;
     private final Parser parser;
     private final String sourceFileName;
+    private final TrainerValidator trainerValidator;
 
     public TrainerServiceImpl(TrainerMapper trainerMapper, SecurityService securityService, Parser parser,
-            @Value("${source.csv.trainer}") String sourceFileName) {
+            @Value("${source.csv.trainer}") String sourceFileName, TrainerValidator trainerValidator) {
         this.trainerMapper = trainerMapper;
         this.securityService = securityService;
         this.parser = parser;
         this.sourceFileName = sourceFileName;
+        this.trainerValidator = trainerValidator;
     }
 
     @PostConstruct
     private void initilialize() {
-        trainerRepository.addAll(parser.parse(Trainer.class, sourceFileName));
+        trainerRepository.addAll(parser.parse(Trainer.class, sourceFileName, trainerValidator));
     }
 
     @Override

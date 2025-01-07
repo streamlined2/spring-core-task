@@ -17,6 +17,7 @@ import com.streamlined.tasks.exception.EntityUpdateException;
 import com.streamlined.tasks.exception.NoSuchEntityException;
 import com.streamlined.tasks.mapper.TraineeMapper;
 import com.streamlined.tasks.parser.Parser;
+import com.streamlined.tasks.validator.TraineeValidator;
 
 import jakarta.annotation.PostConstruct;
 
@@ -29,18 +30,20 @@ public class TraineeServiceImpl extends UserServiceImpl implements TraineeServic
     private final SecurityService securityService;
     private final Parser parser;
     private final String sourceFileName;
+    private final TraineeValidator traineeValidator;
 
     public TraineeServiceImpl(TraineeMapper traineeMapper, SecurityService securityService, Parser parser,
-            @Value("${source.csv.trainee}") String sourceFileName) {
+            @Value("${source.csv.trainee}") String sourceFileName, TraineeValidator traineeValidator) {
         this.traineeMapper = traineeMapper;
         this.securityService = securityService;
         this.parser = parser;
         this.sourceFileName = sourceFileName;
+        this.traineeValidator = traineeValidator;
     }
 
     @PostConstruct
     private void initilialize() {
-        traineeRepository.addAll(parser.parse(Trainee.class, sourceFileName));
+        traineeRepository.addAll(parser.parse(Trainee.class, sourceFileName, traineeValidator));
     }
 
     @Override

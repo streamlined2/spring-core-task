@@ -17,6 +17,7 @@ import com.fasterxml.jackson.databind.RuntimeJsonMappingException;
 import com.streamlined.tasks.SpringcoretaskApplication;
 import com.streamlined.tasks.entity.Trainee;
 import com.streamlined.tasks.exception.ParseException;
+import com.streamlined.tasks.validator.TraineeValidator;
 
 @ExtendWith(SpringExtension.class)
 @TestPropertySource(locations = "classpath:application-integration-test.properties")
@@ -26,7 +27,11 @@ class ParserIT {
     @Autowired
     private Parser parser;
 
+    @Autowired
+    private TraineeValidator traineeValidator;
+
     private @Value("${source.csv.traineevalid}") String validTraineeSourceFileName;
+    private @Value("${source.csv.traineenonvalid}") String nonvalidTraineeSourceFileName;
     private @Value("${source.csv.traineenonvaliduserid}") String nonValidUserIdSourceFileName;
     private @Value("${source.csv.traineenonvalidisactive}") String nonValidIsActiveSourceFileName;
     private @Value("${source.csv.traineenonvaliddate}") String nonValidDateSourceFileName;
@@ -50,7 +55,7 @@ class ParserIT {
                         Map.entry(5L, new Trainee(5L, "Kyle", "Stark", "Kyle.Stark", "kyle", true,
                                 LocalDate.of(1988, 5, 18), "USA")));
 
-        Map<Long, Trainee> traineeMap = parser.parse(Trainee.class, validTraineeSourceFileName);
+        Map<Long, Trainee> traineeMap = parser.parse(Trainee.class, validTraineeSourceFileName, traineeValidator);
 
         assertNotNull(traineeMap);
         assertEquals(5, traineeMap.size());
@@ -58,9 +63,17 @@ class ParserIT {
     }
 
     @Test
+    void parseShouldReturnEmptyMapOfEntities_ifEveryEntityContainsInvalidData() {
+        Map<Long, Trainee> traineeMap = parser.parse(Trainee.class, nonvalidTraineeSourceFileName, traineeValidator);
+
+        assertNotNull(traineeMap);
+        assertTrue(traineeMap.isEmpty());
+    }
+
+    @Test
     void parseShouldThrowParseException_ifSourceFileContainsNonValidUserId() {
         ParseException exc = assertThrows(ParseException.class,
-                () -> parser.parse(Trainee.class, nonValidUserIdSourceFileName));
+                () -> parser.parse(Trainee.class, nonValidUserIdSourceFileName, traineeValidator));
         assertEquals("Cannot parse input data", exc.getMessage());
         assertTrue(exc.getCause() instanceof RuntimeJsonMappingException);
     }
@@ -68,7 +81,7 @@ class ParserIT {
     @Test
     void parseShouldThrowParseException_ifSourceFileContainsNonValidIsActive() {
         ParseException exc = assertThrows(ParseException.class,
-                () -> parser.parse(Trainee.class, nonValidIsActiveSourceFileName));
+                () -> parser.parse(Trainee.class, nonValidIsActiveSourceFileName, traineeValidator));
         assertEquals("Cannot parse input data", exc.getMessage());
         assertTrue(exc.getCause() instanceof RuntimeJsonMappingException);
     }
@@ -76,7 +89,7 @@ class ParserIT {
     @Test
     void parseShouldThrowParseException_ifSourceFileContainsNonValidDate() {
         ParseException exc = assertThrows(ParseException.class,
-                () -> parser.parse(Trainee.class, nonValidDateSourceFileName));
+                () -> parser.parse(Trainee.class, nonValidDateSourceFileName, traineeValidator));
         assertEquals("Cannot parse input data", exc.getMessage());
         assertTrue(exc.getCause() instanceof RuntimeJsonMappingException);
     }

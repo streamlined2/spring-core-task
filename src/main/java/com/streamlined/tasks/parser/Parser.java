@@ -15,6 +15,7 @@ import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.streamlined.tasks.entity.Entity;
 import com.streamlined.tasks.exception.ParseException;
+import com.streamlined.tasks.validator.Validator;
 
 @Component
 public class Parser {
@@ -27,19 +28,27 @@ public class Parser {
         this.csvMapper = csvMapper;
     }
 
-    public <K, T extends Entity<K>> Map<K, T> parse(Class<T> entityClass,  String sourceFileName) {
+    public <K, T extends Entity<K>> Map<K, T> parse(Class<T> entityClass, String sourceFileName,
+            Validator<T> validator) {
+        
         Map<K, T> entityMap = new HashMap<>();
         try (InputStream is = getClass().getResourceAsStream(sourceFileName);
                 BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
-            CsvSchema schema = CsvSchema.emptySchema().withHeader();
+            
+            CsvSchema schema = CsvSchema.emptySchema().withHeader();            
             MappingIterator<T> iterator = csvMapper.readerFor(entityClass).with(schema).readValues(reader);
-            while (iterator.hasNext()) {
+            for (int lineNo = 1; iterator.hasNext(); lineNo++) {
                 T entity = iterator.next();
-                entityMap.put(entity.getPrimaryKey(), entity);
+                if (validator.isValid(entity)) {
+                    entityMap.put(entity.getPrimaryKey(), entity);
+                } else {
+                    LOGGER.info("Line number {} in file {} contains invalid entity data", lineNo,
+                            sourceFileName);
+                }
             }
             return entityMap;
         } catch (Exception e) {
-            LOGGER.error("Cannot parse input data", e);
+            LOGGER.debug("Cannot parse input data", e);
             throw new ParseException("Cannot parse input data", e);
         }
     }
